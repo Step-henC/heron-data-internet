@@ -1,24 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/HomePage/HomePage';
+import ChartsPage from './components/ChartsPage/ChartsPage';
 
 function App() {
+
+  const [file, setFile] = useState(null) 
+  const [badSamples, setBadSamples] = useState(null)
+
+  useEffect(() => {
+    if(!file) return;
+
+    sessionStorage.setItem('file', JSON.stringify(file))
+  }, [file])
+
+  useEffect(() => {
+    if(!badSamples) return;
+
+    sessionStorage.setItem('badSamples', JSON.stringify(badSamples))
+  }, [badSamples])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        <Routes>
+          <Route exact path='/' element={<HomePage setFile={setFile} setBadSamples={setBadSamples}/>}/>
+          <Route exact path='/:repNum/:allSame/charts' element={<ChartsPage file={file} />} />
+        </Routes>
+      </Router>
   );
 }
 
