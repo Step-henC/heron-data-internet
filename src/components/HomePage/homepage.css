@@ -11,6 +11,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin: 7em auto 0 auto;
   height: 70vh;
   width: 40vw;
   min-width: 40vw;
@@ -18,12 +19,20 @@
   overflow: auto;
 }
 
-@media only screen and (max-width: 1110px) {
+@media only screen and (max-width: 1042px) {
+  #heron-main-logo {
+    width: 60vw;
+    min-width: 70vw;
+  }
+}
+
+@media only screen and (max-width: 840px) {
   #heron-main-logo {
     width: 90vw;
     min-width: 70vw;
   }
 }
+
 
 small > strong,
 small > strong > a {
@@ -187,6 +196,10 @@ textarea::placeholder {
   width: 100%;
   resize: vertical;
   outline: none;
+}
+
+#bad-sample-list-requirements{
+  padding-top: .5em;
 }
 
 /*https://www.quackit.com/css/flexbox/tutorial/align_form_elements_with_flexbox.cfm*/

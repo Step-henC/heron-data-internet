@@ -2,8 +2,7 @@ import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function MainTable({ fileData }) {
-  const { repNum } = useParams();
+export default function MainTable({ fileData, repNum }) {
  
   const [replicateBatch, setReplicateBatch] = useState(new Map());
   const [quantificationReplicateBatch, setQuantificationReplicateBatch] =
@@ -15,7 +14,7 @@ export default function MainTable({ fileData }) {
     const tempQuantReplicate = new Map();
     let tempSum = []; //for ratio group average
     let tempQuantSum = []; //for quantification group avg
-    const replicateSet = parseInt(repNum);
+    const replicateSet = repNum;
     for (let index = 0; index < fileData.length; index++) {
       tempSum.push(parseFloat(fileData[index]["Ratio To Standard"]));
       tempQuantSum.push(
@@ -62,15 +61,8 @@ export default function MainTable({ fileData }) {
   }, [repNum, fileData]);
 
   return (
-    <div
-      style={{
-        maxHeight: "80vh",
-        maxWidth: "100vw",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Table striped bordered hover responsive="sm" size="sm">
+    <>
+      <Table striped bordered hover  size="sm">
         <thead>
           <tr>
             <th>Peptide Name</th>
@@ -94,13 +86,13 @@ export default function MainTable({ fileData }) {
                 <td>{replicate?.Protein}</td>
                 <td>{replicate?.Quantification}</td>
                 <td>
-                  {(index + 1) % parseInt(repNum) === 0
+                  {(index + 1) % repNum === 0
                     ? quantificationReplicateBatch[replicate.Replicate]
                     : ""}
                 </td>
                 <td>{replicate["Ratio To Standard"]}</td>
                 <td>
-                  {(index + 1) % parseInt(repNum) === 0
+                  {(index + 1) % repNum === 0
                     ? replicateBatch[replicate.Replicate]
                     : ""}
                 </td>
@@ -110,7 +102,7 @@ export default function MainTable({ fileData }) {
           })}
         </tbody>
       </Table>
-      <Table striped bordered hover responsive="sm" size="sm">
+      <Table striped bordered hover responsive='sm' size="sm">
         <thead>
           <tr key="anykeys">
             <th>Group ID for Technical Replicate</th>
@@ -121,7 +113,7 @@ export default function MainTable({ fileData }) {
         </thead>
         <tbody key="outtakeys">
           {[...fileData]
-            .filter((_, ind) => (ind + 1) % parseInt(repNum) === 0)
+            .filter((_, ind) => (ind + 1) % repNum === 0)
             .map((replicate, index) => {
               return (
                 <tr key={index}>
@@ -134,6 +126,6 @@ export default function MainTable({ fileData }) {
             })}
         </tbody>
       </Table>
-    </div>
+    </>
   );
 }

@@ -23,7 +23,6 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [charactersRemaining, setCharactersRemaining] = useState(1000);
   const [switchState, setSwitchSate] = useState(false);
   const [badListFormatAccepted, setBadListFormatAccepted] = useState(true);
-  const inputFile = useRef(null);
 
   const navigate = useNavigate();
 
@@ -92,7 +91,7 @@ export default function HomePage({ setFile, setBadSamples }) {
         //test if the list of samples matches the accepted format
 
         //if format is acceptable
-        if ( /^(?:[(][a-zA-Z0-9_-]*(,\s)?[a-zA-Z0-9_-]*[)]\s?)+$/g.test(badSampleList)) {
+        if (BAD_LIST_PATTERN.test(badSampleList)) {
           //process data
 
           setInputKey(Date.now);
@@ -101,7 +100,7 @@ export default function HomePage({ setFile, setBadSamples }) {
           navigate(`/${technicalReplicate}/${1}/charts`);
         } else {
           setBadListFormatAccepted(
-            /^(?:[(][a-zA-Z0-9_-]*(,\s)?[a-zA-Z0-9_-]*[)]\s?)+$/g.test(badSampleList)
+            BAD_LIST_PATTERN.test(badSampleList)
           );
         }
       }
@@ -130,46 +129,34 @@ export default function HomePage({ setFile, setBadSamples }) {
       <div
         style={{
           backgroundColor: "black",
-          height: "90vh",
+          height: "100vh",
           display: "flex",
+          flexDirection: 'column',
           alignItems: "center",
           justifyItems: "center",
-          paddingTop: "2em",
+          
         }}
       >
         <img
           id={"heron-main-logo"}
           aria-label="heron logo"
-          style={{}}
           alt="logo"
           src={heron}
         />
-      </div>
-      <div
-        style={{
-          backgroundColor: "black",
-          height: "10vh",
-          display: "flex",
-          alignItems: "center",
-          justifyItems: "center",
-        }}
-      >
-        <div
-          style={{
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-            paddingBottom: "5em",
-          }}
-        >
-          <button onClick={showForm} className="button-button">
+
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2em auto 0 auto'}}>
+        <button onClick={showForm} className="button-button">
             Get Started
           </button>
           <button className="button-button">Learn More</button>
+
         </div>
+      
+      
       </div>
+     
       {showCSVForm && (
-        <form id="csv-elem" aria-label="form to upload and submit csv">
+        <form key='key-for-form' id="csv-elem" aria-label="form to upload and submit csv">
           <ul className="wrapper">
             <li className="form-row-title">
               <h2>Upload Skyline File</h2>
@@ -178,7 +165,6 @@ export default function HomePage({ setFile, setBadSamples }) {
               <label htmlFor="file-input">Upload File</label>
               <input
                 type="file"
-                ref={inputFile}
                 accept={ACCEPTABLE_FILE_FORMATS}
                 key={inputKey}
                 onChange={handleFile}
@@ -255,6 +241,7 @@ export default function HomePage({ setFile, setBadSamples }) {
                 >
                   Provide List of Samples without the Specified Replicates
                 </label>
+                <br/>
                 <small id="bad-sample-list-requirements">
                   {BAD_RUNS_PLACEHOLDER}
                 </small>

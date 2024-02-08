@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import ChartsPage from './components/ChartsPage/ChartsPage';
+import NotFound from './components/NotFound/NotFound';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<HomePage setFile={setFile} setBadSamples={setBadSamples}/>}/>
           <Route exact path='/:repNum/:allSame/charts' element={<ChartsPage file={file} />} />
+          <Route exact path='/*' element={<NotFound/>} />
         </Routes>
       </Router>
   );

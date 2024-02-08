@@ -15,6 +15,12 @@ export default function LineCharts() {
         chart: {
           height: 350,
           type: 'line',
+          zoom: {
+enabled: true
+          },
+          animations: {
+            enabled: false
+          },
           dropShadow: {
             enabled: true,
             color: '#000',
@@ -77,9 +83,9 @@ export default function LineCharts() {
 
 return (
 
-    <div id='chart'>
+    
         <ReactApexChart options={options} series={series} type='line' height={350} />
-    </div>
+    
 )
 
 }
