@@ -19,8 +19,7 @@ function App() {
 
   useEffect(() => {
     if(!badSamples) return;
-
-    sessionStorage.setItem('badSamples', JSON.stringify(badSamples))
+    sessionStorage.setItem('badsamples', JSON.stringify(badSamples))
   }, [badSamples])
   return (
       <Router>

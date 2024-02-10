@@ -1,3 +1,31 @@
-p > a {
+.error-meessage-paragraph > a {
     color: black;
+}
+
+.error-mesage-paragraph {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100vh;
+    width: 80vw;
+    max-width: 80vw;
+}
+
+.error-div-charts-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#separate_tables {
+    padding-top: 5em;
+    max-height: 5em;
+    padding-bottom: 1em;
+    min-height: 1em;
+}
+
+#main-charts-page-div{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

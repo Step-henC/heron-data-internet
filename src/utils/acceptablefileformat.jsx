@@ -18,4 +18,4 @@ export const FILE_FIELD_NAMES = [
 ];
 
 export const BAD_LIST_PATTERN =
-  /^(?:[(][a-zA-Z0-9_-]*(,\s)?[a-zA-Z0-9_-]*[)]\s?)+$/g;
+  /^(?:[(][a-zA-Z0-9_-]+(,\s)?[a-zA-Z0-9_-]*[)]\s?)+$/g;

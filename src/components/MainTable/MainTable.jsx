@@ -2,12 +2,12 @@ import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function MainTable({ fileData, repNum }) {
+export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
  
   const [replicateBatch, setReplicateBatch] = useState(new Map());
   const [quantificationReplicateBatch, setQuantificationReplicateBatch] =
     useState(new Map());
-
+    const [outlierArr, setOutlierArr] = useState([])
   useEffect(() => {
     // if (!fileData) return;
     const tempReplicate = new Map();
@@ -55,16 +55,53 @@ export default function MainTable({ fileData, repNum }) {
       }
     }
 
+    if(outlierSampleFromFile.length !== 0){ //if we have outliers
+      //create a temp list
+      let tempOutlierList = []
+        for (let iterator = 0; iterator < outlierSampleFromFile.length; iterator++) { //iterate thru 2D arr
+
+          if (outlierSampleFromFile[iterator].length < 2) { //if only one obj
+            const singletonListObj = outlierSampleFromFile[iterator]; //set a variable for that object for readability
+            const ratioStandard = parseFloat(singletonListObj[0]['Ratio To Standard']);
+            console.log('singleton', singletonListObj)
+            console.log('ratio stand', ratioStandard) //get the one value since that is the avg
+            if (isNaN(ratioStandard)) {// if is not number after parsing
+              singletonListObj[0].Outlier = 0;
+              tempOutlierList.push(singletonListObj) // make outlier prop with avg = zero
+
+            } else {
+              singletonListObj[0].Outlier = ratioStandard
+              tempOutlierList.push(singletonListObj)
+              console.log('concat', tempOutlierList) //add this obj to the list with a new outlier property
+
+            }
+          } else { // if there is more than one item in group
+            
+            const listOfOutliers = outlierSampleFromFile[iterator] //set an obj
+            const outlierGrpAvg = listOfOutliers.reduce((acc, curr) => parseFloat(acc['Ratio To Standard']) + parseFloat(curr['Ratio To Standard']))/listOfOutliers.length //find the avg
+            listOfOutliers[listOfOutliers.length-1].Outlier = outlierGrpAvg //at the last item in arr, create an outlier prop equal to avg
+            tempOutlierList.push(listOfOutliers) // add this list to the list
+            
+
+
+          }
+        }
+
+        setOutlierArr(tempOutlierList)
+    }
     //at the end, put all averages in our real map
     setReplicateBatch(tempReplicate);
     setQuantificationReplicateBatch(tempQuantReplicate);
-  }, [repNum, fileData]);
+  }, [repNum, fileData, outlierSampleFromFile]);
+
+  
 
   return (
     <>
       <Table striped bordered hover  size="sm">
         <thead>
           <tr>
+            <th>#</th>
             <th>Peptide Name</th>
             <th>Peptide Peak Ratio</th>
             <th>Peptide Retention Time</th>
@@ -77,9 +114,10 @@ export default function MainTable({ fileData, repNum }) {
           </tr>
         </thead>
         <tbody>
-          {fileData.map((replicate, index) => {
+          {[...fileData].concat(outlierArr.flat()).map((replicate, index) => {
             return (
               <tr key={replicate.Replicate + index}>
+                <td>{index+1}</td>
                 <td>{replicate?.Peptide}</td>
                 <td>{replicate["Peptide Peak Found Ratio"]}</td>
                 <td>{replicate["Peptide Retention Time"]}</td>
@@ -92,9 +130,9 @@ export default function MainTable({ fileData, repNum }) {
                 </td>
                 <td>{replicate["Ratio To Standard"]}</td>
                 <td>
-                  {(index + 1) % repNum === 0
-                    ? replicateBatch[replicate.Replicate]
-                    : ""}
+                  {(index + 1) % repNum === 0 //if its the nth (repNum) replicate
+                    ? (replicate?.Outlier === undefined ? replicateBatch[replicate.Replicate] : replicate?.Outlier) //check if there is an outlier property if not use replicatebath with avg
+                    : replicate?.Outlier}         
                 </td>
                 <td>{replicate?.Replicate}</td>
               </tr>

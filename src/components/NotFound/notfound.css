@@ -1,46 +1,42 @@
 .not-found-div {
-    padding-top: 5em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  padding-top: 5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-
-    .not-found-title {
-        top: 50%;
-        left: 50%;
-        right: 50%;
-    }
-a {
-    color: black
+  .not-found-title {
+    top: 50%;
+    left: 50%;
+    right: 50%;
+  }
+  a {
+    color: black;
+  }
 }
-    }
 
+#heron-not-found-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 2em auto 0 auto;
+  height: 60vh;
+  width: 40vw;
+  min-width: 40vw;
+  min-height: 60vh;
+  overflow: auto;
+}
 
-    #heron-main-logo {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        margin: 2em auto 0 auto;
-        height: 60vh;
-        width: 40vw;
-        min-width: 40vw;
-        min-height: 60vh;
-        overflow: auto;
-      }
-      
-      @media only screen and (max-width: 1042px) {
-        #heron-main-logo {
-          width: 60vw;
-          min-width: 70vw;
-        }
-      }
-    
+@media only screen and (max-width: 1042px) {
+  #heron-not-found-logo {
+    width: 60vw;
+    min-width: 70vw;
+  }
+}
 
-      @media only screen and (max-width: 840px) {
-        #heron-main-logo {
-          width: 90vw;
-          min-width: 70vw;
-        }
-      }
-
+@media only screen and (max-width: 840px) {
+  #heron-not-found-logo {
+    width: 90vw;
+    min-width: 70vw;
+  }
+}

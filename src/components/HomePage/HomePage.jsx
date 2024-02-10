@@ -1,5 +1,5 @@
 import Layout from "../Layout/Layout";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import heron from "./heronLogo.jpg";
 import "./homepage.css";
 import Papa from "papaparse";
@@ -23,7 +23,8 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [charactersRemaining, setCharactersRemaining] = useState(1000);
   const [switchState, setSwitchSate] = useState(false);
   const [badListFormatAccepted, setBadListFormatAccepted] = useState(true);
-
+  const [noFile, setNoFile] = useState(true);
+  const [noFileMessage, setNoFileMessage] = useState(false)
   const navigate = useNavigate();
 
   const showForm = (e) => {
@@ -52,6 +53,7 @@ export default function HomePage({ setFile, setBadSamples }) {
         },
         complete: function (results) {
           setFile(results.data);
+          setNoFile(false)
         },
       });
     }
@@ -64,11 +66,13 @@ export default function HomePage({ setFile, setBadSamples }) {
   };
 
   const handleBadSampleList = (e) => {
+    setBadSamples(e.target.value)
+
+    //make a copy to track for error handling on this page and char count
     setBadSampleList(e.target.value);
   };
   const handleTechnicalReplicate = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+   
 
     setTechnicalReplicate(e.target.value);
   };
@@ -77,8 +81,11 @@ export default function HomePage({ setFile, setBadSamples }) {
     e.preventDefault();
     e.stopPropagation();
 
+    
+      setNoFileMessage(noFile)
+    
     //if first two fields are good, check if the all samples have same replicate num
-    if (isAcceptableFormat && isFileProcessed) {
+    if (isAcceptableFormat && isFileProcessed && !noFile) {
       //if all samples have replicate num, process data
       if (goodRun) {
         setInputKey(Date.now);
@@ -91,16 +98,16 @@ export default function HomePage({ setFile, setBadSamples }) {
         //test if the list of samples matches the accepted format
 
         //if format is acceptable
-        if (BAD_LIST_PATTERN.test(badSampleList)) {
+        if (BAD_LIST_PATTERN.test(badSampleList.trim())) {
           //process data
 
           setInputKey(Date.now);
-          setBadSamples(badSampleList)
+          //setBadSamples(badSampleList.trim())
           //all same is 1 for false
           navigate(`/${technicalReplicate}/${1}/charts`);
         } else {
           setBadListFormatAccepted(
-            BAD_LIST_PATTERN.test(badSampleList)
+            BAD_LIST_PATTERN.test(badSampleList.trim())
           );
         }
       }
@@ -124,6 +131,8 @@ export default function HomePage({ setFile, setBadSamples }) {
       document.getElementById("csv-elem").scrollIntoView();
     }
   }, [showCSVForm]);
+
+
   return (
     <Layout>
       <div
@@ -156,7 +165,7 @@ export default function HomePage({ setFile, setBadSamples }) {
       </div>
      
       {showCSVForm && (
-        <form key='key-for-form' id="csv-elem" aria-label="form to upload and submit csv">
+        <form id="csv-elem" aria-label="form to upload and submit csv" >
           <ul className="wrapper">
             <li className="form-row-title">
               <h2>Upload Skyline File</h2>
@@ -172,7 +181,7 @@ export default function HomePage({ setFile, setBadSamples }) {
               />
             </li>
             {!isAcceptableFormat && (
-              <li className="form-row">
+              <li className="form-col">
                 <p
                   aria-label="File format error. Not a valid CSV or XLSX file"
                   style={{ color: "red" }}
@@ -194,6 +203,17 @@ export default function HomePage({ setFile, setBadSamples }) {
                 </p>
               </li>
             )}
+            {noFileMessage && (
+              <li className="form-col">
+                <p
+                  aria-label="Error processing selected file"
+                  style={{ color: "red" }}
+                >
+                  Please choose a file.
+                </p>
+              </li>
+            )}
+            
 
             <li className="form-row">
               <label aria-label="select number of replicates" htmlFor="rep-num">
@@ -255,6 +275,8 @@ export default function HomePage({ setFile, setBadSamples }) {
                   </small>
                 )}
                 <textarea
+                onKeyDown={(e) => handleBadSampleList(e)}
+                wrap='off'
                   placeholder="ex: (sample1, sample2) (sample3)"
                   name="bad-sample-list"
                   className={

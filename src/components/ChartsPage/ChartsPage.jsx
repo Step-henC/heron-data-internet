@@ -14,6 +14,8 @@ export default function ChartsPage() {
   const [isAllSame, setIsAllSame] = useState(true);
   const [allSameUrlGood, setAllSameUrlGood] = useState(true)
   const [replicateNumGood, setReplicateNumGood] = useState(true)
+  const [errorWithBadSamples, setErrorWithBadSamples] = useState(false)
+  const [outlierSampleFromFile, setOutlierSampleFromFile] = useState([]) 
 
   let navigate = useNavigate();
   const {allSame} = useParams();
@@ -25,19 +27,10 @@ export default function ChartsPage() {
     let possibleInterval;
     const sessionFile = JSON.parse(sessionStorage.getItem("file"));
     
-       // setIsFileErrorMessage(true)
+     
+
     
-    const badList = parseInt(allSame)
-    // if (parseInt(badList) === 1) {
-    //     const bad = JSON.parse(sessionStorage.getItem('badSamples')).toString()
-        
-    //     const samplesToFilter = bad.split(/[)]\s?/g).map((str) => str.replaceAll(/[()]/g, ""));
-    //     const filtered = [...sessionFile].filter((item) => !samplesToFilter.includes(item.Replicate))
-    //     console.log('stf', samplesToFilter)
-    //     console.log('filt',filtered)
-    //     console.log('orig', sessionFile)
-        
-    // }
+    
 
     if (sessionFile === null || !Array.isArray(sessionFile)) {
       setIsFileErrorMessage(true);
@@ -62,11 +55,71 @@ export default function ChartsPage() {
           clearInterval(possibleInterval);
         };
       } else {
+        if (parseInt(allSame) === 1) { // move logic to after sessionfile === null check
+    
+          // get bad sample list
+            
+          const bad = JSON.parse(sessionStorage.getItem('badsamples'))
+
+  
+          if (typeof bad !== 'string' || bad === null) {
+            setErrorWithBadSamples(true)
+          } else {
+           
+    
+            //clean up list so it is only names and no parentesis or anything
+            const samplesToFilter = bad.split(')').filter((str) => str !== "").map((str) => {const newstr = str.replace(/[()]/g, "").trim(); return newstr.split(', ')});
+    
+            //filter provided list of bad samples from session file so we do batch analysis on sample file
+            const filtered = [...sessionFile].filter((rep) => !samplesToFilter.some((strArr) => strArr.includes(rep.Replicate)));
+            
+    
+            //retrieve objects of provided names because we need to do math on object properties
+            const providedReplicates = [...sessionFile].filter((rep) => samplesToFilter.some((strArr) => strArr.includes(rep.Replicate)))
+            console.log('stf', samplesToFilter)
+            console.log('filt',filtered)
+            console.log('orig', sessionFile)
+            console.log('provided reps', providedReplicates)
+    
+    
+            // we now have the list of bad sample names as a 2D array where each group (or single) sample is together
+            // and another list containing the bad sample objects that are not grouped together
+            // we need te object to be groupd together like the array so we can do analysis
+            //so go through the 2D array of names
+            const res = samplesToFilter.map((strArr) => {
+    
+              //for each array in the samples to filter, go through the array to get ALL the objects from the bad list
+             let arrOfNameAndObj =  strArr.map((nameReplicate) => {
+    
+              //return the object that matches the name of the replicate 
+                return providedReplicates.find((replicate) => replicate.Replicate === nameReplicate)
+              })
+              
+              // now return the same array, but add the corresponding object
+              return arrOfNameAndObj
+              })
+    
+              // error handle
+                setErrorWithBadSamples(res.length !== samplesToFilter.length)
+
+                setPageReloadFile(filtered)
+                setOutlierSampleFromFile(res)
+                clearInterval(possibleInterval)
+
+          }
+            
+        } else if (parseInt(allSame) === 0) {
+           
         clearInterval(possibleInterval);
         setPageReloadFile(sessionFile);
+        }
+        
+        
       }
     }
-  }, [isFileErrorMessage, navigate]);
+  
+  }, [navigate, allSame]);
+
 
   useEffect(() => {
     if (seconds <= 0 || !isFileErrorMessage) return;
@@ -92,47 +145,44 @@ setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10)
       >
         {isFileErrorMessage && (
           <div
+          className="error-div-charts-page"
             aria-label="no file found"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            
           >
             <p
-              style={{
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
-                height: "100vh",
-                width: "80vw",
-                maxWidth: "80vw",
-              }}
+             className="error-message-paragraph"
+             
             >
               Error. The file associated with this session is either formatted
               incorrectly or not present. Please make sure a valid file has been selected. Rerouting you to the home page in {seconds} second
               {seconds > 1 ? "s" : ""}
             </p>
           </div>)}
+          {errorWithBadSamples && (
+          <div
+          className="error-div-charts-page"
+            aria-label="no file found"
+            
+          >
+            <p
+             className="error-message-paragraph"
+             aria-label='error, no additional samples provided'
+             
+            >
+              Error. There are samples without the provided number technical samples, however those outlier samples have either not been provided, or cannot be processed. 
+              Please select 'No' on the third question in the homepage form and provide the outlier samples in the acceptable format.
+              If the error continues, please close this browser window and restart. 
+            </p>
+          </div>)}
 
           { (!allSameUrlGood || !replicateNumGood) && (
           <div
+          className="error-div-charts-page"
             aria-label="no file found"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+          
           >
             <p
-              style={{
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
-                height: "100vh",
-                width: "80vw",
-                maxWidth: "80vw",
-              }}
+            className="error-message-paragraph"   
             >
               Error. Either the number of replicates cannot be processed or it cannot be determined if all the samples in this run have the same 
               number of technical replicates. Please be sure not to alter the url. Failure to do so will cause the data analysis to behvave
@@ -140,26 +190,17 @@ setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10)
             </p>
           </div>)}
          
-          { (!isFileErrorMessage && allSameUrlGood && replicateNumGood) &&(
-          <div  style={{
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-          
-          }}>
-          <MainTable fileData={pageReloadFile} repNum={parseInt(repNum)} />
+          { (!isFileErrorMessage && allSameUrlGood && replicateNumGood && !errorWithBadSamples) &&(
+          <div  
+          id='main-charts-page-div'
+          >
+          <MainTable fileData={pageReloadFile} repNum={parseInt(repNum)} outlierSampleFromFile={outlierSampleFromFile}/>
             <div
               id="separate_tables"
-              style={{
-                paddingTop: "5em",
-                maxHeight: "5em",
-                paddingBottom: "1em",
-                minHeight: "1em",
-              }}
+              
             ></div>
             <LineCharts />
             </div>) }
-        
         
       </div>
     </Layout>
