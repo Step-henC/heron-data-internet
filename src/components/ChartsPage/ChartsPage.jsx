@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import MainTable from "../MainTable/MainTable";
 import Layout from "../Layout/Layout";
 import LineCharts from "../LineCharts/LineCharts";
-import { FILE_FIELD_NAMES } from "../../utils/acceptablefileformat";
+import { EXPECTED_FIELD_NAMES } from "../../utils/acceptablefileformat";
 import './chartspage.css'
 import { useParams } from "react-router-dom";
 
@@ -42,11 +42,12 @@ export default function ChartsPage() {
         clearInterval(possibleInterval);
       };
     } else {
-      //if it is an array, check that the file is in the expected format
-      const fileOK = Object.keys(sessionFile[0]).some(
-        (item) => !FILE_FIELD_NAMES.includes(item)
-      );
-      if (fileOK) {
+      //if it is an array, check that the file has the expected columns
+      const listOfFileFields = Object.keys(sessionFile.at(0));
+      const fileNotOK = listOfFileFields.some(
+        (item) => !EXPECTED_FIELD_NAMES.includes(item)
+      ) || listOfFileFields.length !== EXPECTED_FIELD_NAMES.length;
+      if (fileNotOK) {
         setIsFileErrorMessage(true);
         possibleInterval = setInterval(() => {
           navigate("/");
@@ -76,10 +77,7 @@ export default function ChartsPage() {
     
             //retrieve objects of provided names because we need to do math on object properties
             const providedReplicates = [...sessionFile].filter((rep) => samplesToFilter.some((strArr) => strArr.includes(rep.Replicate)))
-            console.log('stf', samplesToFilter)
-            console.log('filt',filtered)
-            console.log('orig', sessionFile)
-            console.log('provided reps', providedReplicates)
+           
     
     
             // we now have the list of bad sample names as a 2D array where each group (or single) sample is together
@@ -102,8 +100,44 @@ export default function ChartsPage() {
               // error handle
                 setErrorWithBadSamples(res.length !== samplesToFilter.length)
 
-                setPageReloadFile(filtered)
-                setOutlierSampleFromFile(res)
+                setPageReloadFile(filtered.map((rep) => { // for averages and reducers we need to make sure floats are parse-able
+                  const ratio = parseFloat(rep['Ratio To Standard']);
+                  const quant = parseFloat(rep?.Quantification.split(' ').at(0));
+
+                  if (isNaN(ratio)){
+                    rep.ParsedRatioToStandard = 0; 
+                  } else {
+                    rep.ParsedRatioToStandard = ratio;
+                  }
+
+                  isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
+                  return rep;
+                }).sort((item, next) => { //sort by name to group samples together in run
+                  const first = item?.Replicate
+                  const second = next?.Replicate;
+                  if (first < second){
+                    return -1;
+                  }
+                  if (first > second) {
+                    return 1;
+                  }
+                  return 0;
+                }))
+                setOutlierSampleFromFile(res.map((arr) => {
+                      return arr.map((rep) => { // for averages and reducers we need to make sure floats are parse-able
+                        const ratio = parseFloat(rep['Ratio To Standard']);
+                        const quant = parseFloat(rep?.Quantification.split(' ').at(0));
+      
+                        if (isNaN(ratio)){
+                          rep.ParsedRatioToStandard = 0; 
+                        } else {
+                          rep.ParsedRatioToStandard = ratio;
+                        }
+      
+                        isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
+                        return rep;
+                      })
+                }))
                 clearInterval(possibleInterval)
 
           }
@@ -111,7 +145,22 @@ export default function ChartsPage() {
         } else if (parseInt(allSame) === 0) {
            
         clearInterval(possibleInterval);
-        setPageReloadFile(sessionFile);
+        setPageReloadFile([...sessionFile]
+        
+        .map((rep) => { // for averages and reducers we need to make sure floats are parse-able
+          const ratio = parseFloat(rep['Ratio To Standard']);
+          const quant = parseFloat(rep?.Quantification.split(' ').at(0));
+
+          if (isNaN(ratio)){
+            rep.ParsedRatioToStandard = 0; 
+          } else {
+            rep.ParsedRatioToStandard = ratio;
+          }
+
+          isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
+
+          return rep;
+        }));
         }
         
         
@@ -195,11 +244,7 @@ setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10)
           id='main-charts-page-div'
           >
           <MainTable fileData={pageReloadFile} repNum={parseInt(repNum)} outlierSampleFromFile={outlierSampleFromFile}/>
-            <div
-              id="separate_tables"
-              
-            ></div>
-            <LineCharts />
+            
             </div>) }
         
       </div>

@@ -1,27 +1,32 @@
 import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import LineCharts from "../LineCharts/LineCharts";
+import AveragesTable from "../AveragesTable/AveragesTable";
+import GroupTable from "../GroupTable/GroupTable";
 
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
  
-  const [replicateBatch, setReplicateBatch] = useState(new Map());
-  const [quantificationReplicateBatch, setQuantificationReplicateBatch] =
-    useState(new Map());
+  
+  
     const [outlierArr, setOutlierArr] = useState([])
+    const [listOfPeptideMaps, setListOfPeptideMaps] = useState([])
+    let groupId = 0;
+    
+  
   useEffect(() => {
-    // if (!fileData) return;
-    const tempReplicate = new Map();
-    const tempQuantReplicate = new Map();
+    
     let tempSum = []; //for ratio group average
     let tempQuantSum = []; //for quantification group avg
     const replicateSet = repNum;
+    
     for (let index = 0; index < fileData.length; index++) {
-      tempSum.push(parseFloat(fileData[index]["Ratio To Standard"]));
+      tempSum.push((fileData[index]?.ParsedRatioToStandard));
       tempQuantSum.push(
-        parseFloat(fileData[index]?.Quantification.split(" ").at(0))
-      );
-
-      if ((index + 1) % replicateSet === 0) {
+        fileData[index]?.ParsedQuantification)
+      
+           
+        
+        if ((index + 1) % replicateSet === 0) {
         //if the next value is end of batch, lets do what we have so far
 
         //add replicates in that batch
@@ -42,9 +47,18 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         const replicateSetAverage = sum / replicateSet;
         const quantSetAvg = quantSum / replicateSet;
 
-        //push average into a map where peptide name is key and average is value
-        tempReplicate[fileData[index].Replicate] = replicateSetAverage;
-        tempQuantReplicate[fileData[index].Replicate] = quantSetAvg;
+      
+          // create fields with averages
+        fileData[index].RatioAvg = replicateSetAverage;
+        fileData[index].QuantAvg = quantSetAvg;
+
+        //for line graph
+        fileData[index].x = replicateSetAverage;
+        fileData[index].y = quantSetAvg;
+
+        //group id for grouptable
+        fileData[index].GroupID = ++groupId;
+
 
         //for averagesTable
 
@@ -53,6 +67,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         //refresh temporary array holding quantification values
         tempQuantSum = [];
       }
+
+
+      
     }
 
     if(outlierSampleFromFile.length !== 0){ //if we have outliers
@@ -62,24 +79,29 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
           if (outlierSampleFromFile[iterator].length < 2) { //if only one obj
             const singletonListObj = outlierSampleFromFile[iterator]; //set a variable for that object for readability
-            const ratioStandard = parseFloat(singletonListObj[0]['Ratio To Standard']);
-            console.log('singleton', singletonListObj)
-            console.log('ratio stand', ratioStandard) //get the one value since that is the avg
-            if (isNaN(ratioStandard)) {// if is not number after parsing
-              singletonListObj[0].Outlier = 0;
-              tempOutlierList.push(singletonListObj) // make outlier prop with avg = zero
-
-            } else {
-              singletonListObj[0].Outlier = ratioStandard
+            
+           
+           
+              singletonListObj[0].RatioAvg = singletonListObj[0].ParsedRatioToStandard;
+              singletonListObj[0].QuantAvg = singletonListObj[0].ParsedQuantification;
+              
+              //for line charts
+              singletonListObj[0].x =  singletonListObj[0].ParsedRatioToStandard;
+              singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
               tempOutlierList.push(singletonListObj)
-              console.log('concat', tempOutlierList) //add this obj to the list with a new outlier property
 
-            }
+            
           } else { // if there is more than one item in group
             
             const listOfOutliers = outlierSampleFromFile[iterator] //set an obj
-            const outlierGrpAvg = listOfOutliers.reduce((acc, curr) => parseFloat(acc['Ratio To Standard']) + parseFloat(curr['Ratio To Standard']))/listOfOutliers.length //find the avg
-            listOfOutliers[listOfOutliers.length-1].Outlier = outlierGrpAvg //at the last item in arr, create an outlier prop equal to avg
+            const outlierGrpAvg = listOfOutliers.reduce((acc, curr) => acc?.ParsedRatioToStandard + curr?.ParsedRatioToStandard)/listOfOutliers.length //find the avg
+            const quantGrpAvg = listOfOutliers.reduce((acc, curr) => acc?.ParsedQuantification + curr?.ParsedQuantification)/listOfOutliers.length
+            listOfOutliers[listOfOutliers.length-1].RatioAvg = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
+            listOfOutliers[listOfOutliers.length-1].QuantAvg = quantGrpAvg;
+
+            //for line charts
+            listOfOutliers[listOfOutliers.length-1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
+            listOfOutliers[listOfOutliers.length-1].y = quantGrpAvg;
             tempOutlierList.push(listOfOutliers) // add this list to the list
             
 
@@ -89,81 +111,41 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
         setOutlierArr(tempOutlierList)
     }
-    //at the end, put all averages in our real map
-    setReplicateBatch(tempReplicate);
-    setQuantificationReplicateBatch(tempQuantReplicate);
+
   }, [repNum, fileData, outlierSampleFromFile]);
 
-  
+  useEffect(() => {
+    const uniqueNames = [];
+    for (const file of fileData) {
+      if (!uniqueNames.includes(file?.Peptide)) {
+        uniqueNames.push(file?.Peptide)
+      }
+    }
+    
+setListOfPeptideMaps(uniqueNames)
+
+  }, [fileData])
 
   return (
     <>
-      <Table striped bordered hover  size="sm">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Peptide Name</th>
-            <th>Peptide Peak Ratio</th>
-            <th>Peptide Retention Time</th>
-            <th>Protein</th>
-            <th>Quantification</th>
-            <th>Quant Group Avg</th>
-            <th>Ratio to Standard</th>
-            <th>Ratio Group Average</th>
-            <th>Replicate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...fileData].concat(outlierArr.flat()).map((replicate, index) => {
-            return (
-              <tr key={replicate.Replicate + index}>
-                <td>{index+1}</td>
-                <td>{replicate?.Peptide}</td>
-                <td>{replicate["Peptide Peak Found Ratio"]}</td>
-                <td>{replicate["Peptide Retention Time"]}</td>
-                <td>{replicate?.Protein}</td>
-                <td>{replicate?.Quantification}</td>
-                <td>
-                  {(index + 1) % repNum === 0
-                    ? quantificationReplicateBatch[replicate.Replicate]
-                    : ""}
-                </td>
-                <td>{replicate["Ratio To Standard"]}</td>
-                <td>
-                  {(index + 1) % repNum === 0 //if its the nth (repNum) replicate
-                    ? (replicate?.Outlier === undefined ? replicateBatch[replicate.Replicate] : replicate?.Outlier) //check if there is an outlier property if not use replicatebath with avg
-                    : replicate?.Outlier}         
-                </td>
-                <td>{replicate?.Replicate}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      <Table striped bordered hover responsive='sm' size="sm">
-        <thead>
-          <tr key="anykeys">
-            <th>Group ID for Technical Replicate</th>
-            <th>Replicate Name</th>
-            <th>Quantification Average</th>
-            <th>Ratio Average</th>
-          </tr>
-        </thead>
-        <tbody key="outtakeys">
-          {[...fileData]
-            .filter((_, ind) => (ind + 1) % repNum === 0)
-            .map((replicate, index) => {
-              return (
-                <tr key={index}>
-                  <td>Group {index + 1}</td>
-                  <td>{replicate.Replicate}</td>
-                  <td>{replicateBatch[replicate.Replicate]}</td>
-                  <td>{quantificationReplicateBatch[replicate.Replicate]}</td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
+    <AveragesTable tableData={[...fileData].concat(outlierArr.flat())}/>
+     
+
+      <div
+              id="separate_tables"
+              
+            ></div>
+
+          <GroupTable groupData={[...fileData].concat(outlierArr.flat())
+          .filter((rep) => rep.RatioAvg !== undefined)}   />
+     
+      <div
+              id="separate_tables"
+              
+            ></div>
+           {listOfPeptideMaps.map((pepName) => <LineCharts peptideName={pepName} dataForLineGraph={[...fileData].concat(outlierSampleFromFile.flat()).filter((rep) => rep.RatioAvg !== undefined && rep?.Peptide === pepName)}/>)}
+
+
     </>
   );
 }

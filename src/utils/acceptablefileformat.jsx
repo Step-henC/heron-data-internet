@@ -7,7 +7,7 @@ export const ACCEPTABLE_FILE_FORMATS = [
 export const BAD_RUNS_PLACEHOLDER =
   "Please make sure the EXACT names are provided. Copy and paste name for certainty. Format samples in same group in parenthesis, separated by commas. If single sample, place in parenthesis alone";
 
-export const FILE_FIELD_NAMES = [
+export const EXPECTED_FIELD_NAMES = [
   "Replicate",
   "Peptide",
   "Peptide Peak Found Ratio",
@@ -18,4 +18,4 @@ export const FILE_FIELD_NAMES = [
 ];
 
 export const BAD_LIST_PATTERN =
-  /^(?:[(][a-zA-Z0-9_-]+(,\s)?[a-zA-Z0-9_-]*[)]\s?)+$/g;
+  /^(?:[(][a-zA-Z0-9_-]+((,\s)?[a-zA-Z0-9_-])*[)]\s?)+$/g;
