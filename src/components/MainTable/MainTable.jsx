@@ -1,8 +1,8 @@
-import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
 import LineCharts from "../LineCharts/LineCharts";
 import AveragesTable from "../AveragesTable/AveragesTable";
 import GroupTable from "../GroupTable/GroupTable";
+import { std, variance,  } from "mathjs";
 
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
  
@@ -47,10 +47,14 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         const replicateSetAverage = sum / replicateSet;
         const quantSetAvg = quantSum / replicateSet;
 
-      
           // create fields with averages
         fileData[index].RatioAvg = replicateSetAverage;
         fileData[index].QuantAvg = quantSetAvg;
+
+        //coefficient of variation
+        fileData[index].QuantCove = std(tempQuantSum)/quantSetAvg
+        fileData[index].RatioCove = std(tempQuantSum)/replicateSetAverage
+
 
         //for line graph
         fileData[index].x = replicateSetAverage;
@@ -84,6 +88,8 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
            
               singletonListObj[0].RatioAvg = singletonListObj[0].ParsedRatioToStandard;
               singletonListObj[0].QuantAvg = singletonListObj[0].ParsedQuantification;
+
+
               
               //for line charts
               singletonListObj[0].x =  singletonListObj[0].ParsedRatioToStandard;
@@ -94,10 +100,16 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           } else { // if there is more than one item in group
             
             const listOfOutliers = outlierSampleFromFile[iterator] //set an obj
-            const outlierGrpAvg = listOfOutliers.reduce((acc, curr) => acc?.ParsedRatioToStandard + curr?.ParsedRatioToStandard)/listOfOutliers.length //find the avg
-            const quantGrpAvg = listOfOutliers.reduce((acc, curr) => acc?.ParsedQuantification + curr?.ParsedQuantification)/listOfOutliers.length
+            const ratioSum = listOfOutliers.reduce((acc, curr) => acc?.ParsedRatioToStandard + curr?.ParsedRatioToStandard)
+            const quantSum = listOfOutliers.reduce((acc, curr) => acc?.ParsedQuantification + curr?.ParsedQuantification)
+            const outlierGrpAvg = ratioSum/listOfOutliers.length //find the avg
+            const quantGrpAvg = quantSum/listOfOutliers.length
             listOfOutliers[listOfOutliers.length-1].RatioAvg = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
             listOfOutliers[listOfOutliers.length-1].QuantAvg = quantGrpAvg;
+            listOfOutliers[listOfOutliers.length-1].RatioCove = std(ratioSum)/outlierGrpAvg;
+            listOfOutliers[listOfOutliers.length-1].QuantCove = std(quantSum)/quantGrpAvg; //at the last item in arr, create an outlier prop equal to avg
+            //at the last item in arr, create an outlier prop equal to avg
+
 
             //for line charts
             listOfOutliers[listOfOutliers.length-1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
@@ -136,15 +148,20 @@ setListOfPeptideMaps(uniqueNames)
               
             ></div>
 
+
+
           <GroupTable groupData={[...fileData].concat(outlierArr.flat())
           .filter((rep) => rep.RatioAvg !== undefined)}   />
-     
       <div
               id="separate_tables"
               
             ></div>
+
+<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap'}}>
+
            {listOfPeptideMaps.map((pepName) => <LineCharts peptideName={pepName} dataForLineGraph={[...fileData].concat(outlierSampleFromFile.flat()).filter((rep) => rep.RatioAvg !== undefined && rep?.Peptide === pepName)}/>)}
 
+           </div>
 
     </>
   );

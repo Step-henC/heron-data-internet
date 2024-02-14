@@ -1,13 +1,23 @@
-import { VictoryLine, VictoryChart, VictoryLegend, VictoryTheme, VictoryAxis, VictoryScatter, VictoryCursorContainer, VictoryLabel } from "victory";
+import { VictoryLine, VictoryChart, VictoryLegend, VictoryTheme, VictoryAxis, VictoryScatter, VictoryContainer, VictoryLabel, VictoryTooltip } from "victory";
+import './line.css'
+import regression from 'regression'
 export default function LineCharts({peptideName, dataForLineGraph}) {
 
-  
-    
-    console.log(dataForLineGraph)
-  
+  const arr = []
+  dataForLineGraph.forEach((rep) => {
 
+    let tempArr = [rep.y, rep.x]
+arr.push(tempArr)
+
+
+})
+const  xy = regression.linear(arr, {precision: 15})
+
+console.log('xy', xy)
 
 return (
+
+
 
 
 
@@ -15,10 +25,11 @@ return (
   duration: 2000,
   onLoad: { duration: 1000 }
 }}  theme={VictoryTheme.material} 
-   containerComponent={<VictoryCursorContainer responsive={false} cursorLabel={({ datum }) => `${datum.x}, ${datum.y}`} />}
+   containerComponent={<VictoryContainer responsive={false}  />}
     >
 <VictoryLegend x={50} y={20}
-  	title={peptideName}
+  	title={[peptideName, `${xy.string}`, `r2: ${xy.r2}`]}
+      titleComponent={<VictoryLabel style={[{ fontSize: 20 }, { fontSize: 15 }, {fontSize: 15}]}/>}
     centerTitle
     orientation="horizontal"
     gutter={20}
@@ -35,8 +46,9 @@ return (
 <VictoryLine  size={5} style={{data: {fill: 'tomato'}}} data={dataForLineGraph} x='RatioAvg' y='QuantAvg'/>  
 <VictoryAxis dependentAxis label={'Light Heavy Peak Area Ratio'} axisLabelComponent={<VictoryLabel textAnchor="start" dy={-20} />}/> 
 <VictoryAxis label="Analyte Concentration (fmol)" axisLabelComponent={<VictoryLabel textAnchor="start" dy={20} />} />
+<p>HI</p>
     </VictoryChart>
-    
+
 
 )
 

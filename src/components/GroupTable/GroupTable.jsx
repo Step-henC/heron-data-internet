@@ -23,10 +23,21 @@ const columns = [
         sortable: true,
     },
     {
+        name: 'Quantification CV',
+        selector: row => row?.QuantCove,
+        wrap: true,
+        sortable: true,
+    },
+    {
         name: 'Ratio Average (X)',
         selector: row => row?.RatioAvg,
         sortable: true,
         grow: 2,
+    },
+    {
+        name: 'Ratio CV',
+        selector: row => row?.RatioCove,
+        sortable: true,
     }
 ]
 
