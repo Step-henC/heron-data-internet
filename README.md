@@ -4,7 +4,10 @@ This is a refactor of this https://github.com/Step-henC/Heron_Data_Installer
 
 Below is progress video with error handling and graphing data in tables and line graphs. The navbar gradient is supposed to be the color gradient of a typical grey heron [reference here](https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGrey_heron&psig=AOvVaw2ApKxBsoVZspzv-Et2hLWw&ust=1707937898590000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJiCpdCCqYQDFQAAAAAdAAAAABAE) ... I am not offended if you did not pick up on that.
 
-https://github.com/Step-henC/heron-data-internet/assets/98792412/d35548ba-69f3-4c56-8804-7cac660044e0
+
+
+https://github.com/Step-henC/heron-data-internet/assets/98792412/0d53b690-edbf-45f4-a03b-200bc6da3fe7
+
 
 
 ### What Is This
