@@ -61,6 +61,9 @@ export default function Header() {
               <ListGroup.Item action href="/">
                 Upload New File
               </ListGroup.Item>
+              <ListGroup.Item action href="/contact">
+                Contact Us
+              </ListGroup.Item>
             </ListGroup>
           </Offcanvas.Body>
         </Offcanvas>

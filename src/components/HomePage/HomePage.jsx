@@ -3,7 +3,7 @@ import React, { useEffect, useState} from "react";
 import heron from "./heronLogo.jpg";
 import "./homepage.css";
 import Papa from "papaparse";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/esm/Form";
 
 import {
@@ -27,6 +27,7 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [noFileMessage, setNoFileMessage] = useState(false)
   const navigate = useNavigate();
 
+  const {hyperlink} = useParams()
   const showForm = (e) => {
     e.preventDefault();
     e.stopPropagation();

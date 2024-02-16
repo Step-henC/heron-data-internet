@@ -15,12 +15,6 @@ https://github.com/Step-henC/heron-data-internet/assets/98792412/0d53b690-edbf-4
 Heron Data parses mass spec CSV files and calculates and returns averages, saving researchers hours of time doing so by hand in excel. Not all groups will have data and groups with varying amount of members thar differ from the expected batch size must have group members added in (member1, member2)(member3) format.
 
 TODO 
-- Calculate Coefficient of Variance
-- Linear equation in line graph
-- Filter columns in data table
-- R sqaured value in line graphs
-- Export to CSV using papaparse api (used to parse csv)
-- Export to PDF using React-PDF api (npm install @react-pdf/renderer --save)
 - Create an info page showing users how to use it, with sample CSV
 
 ### How This Works
@@ -33,4 +27,6 @@ csv is uploaded to session storage, so it clears at session end, since most stor
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
+### Future Considerations
 
+- PDF api does not allow page breaks (using react-to-pdf). Since it takes a screenshot and pdf-izes that. Will look into react-pdf api in later iterations of app

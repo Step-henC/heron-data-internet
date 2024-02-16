@@ -24,6 +24,14 @@
     min-height: 1em;
 }
 
+#separate_tables-again {
+    padding-top: 5em;
+    max-height: 5em;
+    padding-bottom: 1em;
+    min-height: 1em;
+}
+
+
 #main-charts-page-div{
     display: block;
     margin-left: auto;

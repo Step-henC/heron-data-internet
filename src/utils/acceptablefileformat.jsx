@@ -19,3 +19,5 @@ export const EXPECTED_FIELD_NAMES = [
 
 export const BAD_LIST_PATTERN =
   /^(?:[(][a-zA-Z0-9_-]+((,\s)?[a-zA-Z0-9_-])*[)]\s?)+$/g;
+
+  export const EMAIL_PATTERN = /^\S+[@]\S+[.](com|edu|net|org)$/g;
