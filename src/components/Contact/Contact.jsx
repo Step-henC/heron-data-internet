@@ -33,7 +33,7 @@ const handleSubmit = (e) => {
         
         //emailjs stuff here
 
-        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {publicKey: PUBLIC_KEY}).then(() => console.log('sent')).catch((err) => console.log(err))
+        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {publicKey: PUBLIC_KEY}).then(() => navigate('/contact/success')).catch(() => navigate('/contact/error'))
     } else {
 
         setSubjValid(subject.match(/^\S/g) && subject.length > 0 )
@@ -159,7 +159,7 @@ const handleSubmit = (e) => {
                     onClick={handleSubmit}
                     type="submit"
                   >
-                    Analyze
+                    Send
                   </button>
                 </li>
               </ul>

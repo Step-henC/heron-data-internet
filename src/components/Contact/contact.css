@@ -169,6 +169,22 @@
     outline: none;
   }
   
+  .home-link-small:hover,  .home-link-small:active,  .home-link-small:focus{
+    scale: 1.2;
+    transition: .3s;
+  }
+
+  .home-link-small > a > strong{
+    color: black;
+  }
+
+.contact-response-page{
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, 50%);
+  left: 50%;
+  overflow: hidden;
+}
 
   /*https://www.quackit.com/css/flexbox/tutorial/align_form_elements_with_flexbox.cfm*/
   
