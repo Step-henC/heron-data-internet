@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import heronlogo from "../../heronLogo.svg";
 import ListGroup from "react-bootstrap/ListGroup";
 import React, { useState } from "react";
-import './style.css'
+import "./style.css";
 
 export default function Header() {
   const [show, setShow] = useState(false);
@@ -16,7 +16,10 @@ export default function Header() {
 
   return (
     <Navbar
-    style={{background: " linear-gradient(90deg, #e19b62, #b04646, #b5c0d8, #6c82b7, #1f3d85,  #1f3d85, #1f3d85, #b04646)"}}
+      style={{
+        background:
+          " linear-gradient(90deg, #e19b62, #b04646, #b5c0d8, #6c82b7, #1f3d85,  #1f3d85, #1f3d85, #b04646)",
+      }}
       //data-bs-theme="light"
       fixed="top"
       expand="lg"
@@ -55,13 +58,13 @@ export default function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <ListGroup>
-              <ListGroup.Item action href="/">
-                About
+              <ListGroup.Item action variant="dark" href="/learning">
+                Example Tutorial
               </ListGroup.Item>
-              <ListGroup.Item action href="/">
+              <ListGroup.Item action variant="dark" href="/new">
                 Upload New File
               </ListGroup.Item>
-              <ListGroup.Item action href="/contact">
+              <ListGroup.Item action variant="dark" href="/contact">
                 Contact Us
               </ListGroup.Item>
             </ListGroup>

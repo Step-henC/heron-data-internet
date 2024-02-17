@@ -1,5 +1,5 @@
 import Layout from "../Layout/Layout";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useRef} from "react";
 import heron from "./heronLogo.jpg";
 import "./homepage.css";
 import Papa from "papaparse";
@@ -26,6 +26,7 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [noFile, setNoFile] = useState(true);
   const [noFileMessage, setNoFileMessage] = useState(false)
   const navigate = useNavigate();
+  const startRef = useRef();
 
   const {hyperlink} = useParams()
   const showForm = (e) => {
@@ -133,7 +134,14 @@ export default function HomePage({ setFile, setBadSamples }) {
     }
   }, [showCSVForm]);
 
+useEffect(() => {
+if (!hyperlink) return;
 
+if (hyperlink === 'new') {
+startRef.current.click()
+}
+
+}, [])
   return (
     <Layout>
       <div
@@ -153,12 +161,13 @@ export default function HomePage({ setFile, setBadSamples }) {
           alt="logo"
           src={heron}
         />
+          <h5 style={{color: 'white', paddingBottom: '0', marginTop: "0.7em"}}>Save time analyzing Skyline standard calibration curves</h5>
 
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2em auto 0 auto'}}>
-        <button onClick={showForm} className="button-button">
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.7em auto 0 auto'}}>
+        <button ref={startRef} onClick={showForm} className="button-button">
             Get Started
           </button>
-          <button className="button-button">Learn More</button>
+          <button onClick={() => navigate('/learning')} className="button-button">Learn More</button>
 
         </div>
       
@@ -287,6 +296,7 @@ export default function HomePage({ setFile, setBadSamples }) {
                   }
                   maxLength={1000}
                   required
+                  
                   type="text"
                   value={badSampleList}
                   onChange={(e) => handleBadSampleList(e)}
@@ -301,7 +311,7 @@ export default function HomePage({ setFile, setBadSamples }) {
                 ) : (
                   <small>No characters remaining</small>
                 )}
-                :"
+              
               </li>
             )}
             <li className="form-row-spacer">

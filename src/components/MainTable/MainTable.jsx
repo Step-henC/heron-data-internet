@@ -6,8 +6,7 @@ import { std } from "mathjs";
 import "./maintable.css";
 import ExportButton from "../ExportButton/ExportButton";
 import { unparse } from "papaparse";
-import LineChartsWrapper from "../LineChartsWrapper/LineChartsWrapper";
-import generatePDF, { usePDF, Margin } from "react-to-pdf";
+import generatePDF from "react-to-pdf";
 
 
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
@@ -145,6 +144,10 @@ document.addEventListener('open', () => console.log('unloaded'))
           //for line charts
           singletonListObj[0].x = singletonListObj[0].ParsedRatioToStandard;
           singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
+          singletonListObj[0].GroupID = ++groupId;
+          singletonListObj[0].QuantCove = "single sample"
+          singletonListObj[0].RatioCove = "single sample"
+
           tempOutlierList.push(singletonListObj);
         } else {
           // if there is more than one item in group
@@ -171,6 +174,7 @@ document.addEventListener('open', () => console.log('unloaded'))
           //for line charts
           listOfOutliers[listOfOutliers.length - 1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].y = quantGrpAvg;
+          listOfOutliers[listOfOutliers.length - 1].GroupID = ++groupId
           tempOutlierList.push(listOfOutliers); // add this list to the list
         }
       }
@@ -231,9 +235,7 @@ document.addEventListener('open', () => console.log('unloaded'))
           flexWrap: "wrap",
         }}
        >
-      {/* //    <LineChartsWrapper id="get-to-pdf" listOfPeptidesMap={listOfPeptideMaps} dataForLineChart={[...fileData]
-      //         .concat(outlierSampleFromFile.flat())}
-      //        />  */}
+     
         * {listOfPeptideMaps.map((pepName, ind) => (
           <LineCharts
           key={pepName+ind}

@@ -8,6 +8,7 @@ import NotFound from './components/NotFound/NotFound';
 import Contact from './components/Contact/Contact';
 import ContactSuccess from './components/Contact/ContactSuccess';
 import ContactError from './components/Contact/ContactError';
+import Example from './components/SampleDemo/Example';
 
 function App() {
 
@@ -28,10 +29,14 @@ function App() {
       <Router>
         <Routes>
           <Route exact path='/' element={<HomePage setFile={setFile} setBadSamples={setBadSamples}/>}/>
+          <Route exact path='/:hyperlink' element={<HomePage setFile={setFile} setBadSamples={setBadSamples}/>}/>
           <Route exact path='/:repNum/:allSame/charts' element={<ChartsPage file={file} />} />
           <Route exact path='/contact' element={<Contact />} />
           <Route exact path='/contact/success' element={<ContactSuccess />} />
           <Route exact path='/contact/error' element={<ContactError />} />
+          <Route exact path='/learning' element={<Example />} />
+          
+
           <Route exact path='/*' element={<NotFound/>} />
         </Routes>
       </Router>

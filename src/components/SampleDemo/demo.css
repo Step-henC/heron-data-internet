@@ -1,0 +1,28 @@
+.main-example-div {
+    display: flex;
+    margin: 7em auto 0 5em;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: 7em;
+}
+
+.image-download-file{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#perfect-sample-image {
+    max-width: 70vw;
+    max-height: 40vh;
+}
+
+.download-p {
+    margin: .5em auto 0 auto;
+}
+
+.download-p:hover, .download-p:active, .download-p:focus {
+    font-size: large;
+}

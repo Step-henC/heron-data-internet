@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import MainTable from "../MainTable/MainTable";
 import Layout from "../Layout/Layout";
-import LineCharts from "../LineCharts/LineCharts";
 import { EXPECTED_FIELD_NAMES } from "../../utils/acceptablefileformat";
 import './chartspage.css'
 import { useParams } from "react-router-dom";
@@ -11,7 +10,6 @@ export default function ChartsPage() {
   const [pageReloadFile, setPageReloadFile] = useState([]);
   const [isFileErrorMessage, setIsFileErrorMessage] = useState(false);
   const [seconds, setSeconds] = useState(10);
-  const [isAllSame, setIsAllSame] = useState(true);
   const [allSameUrlGood, setAllSameUrlGood] = useState(true)
   const [replicateNumGood, setReplicateNumGood] = useState(true)
   const [errorWithBadSamples, setErrorWithBadSamples] = useState(false)
