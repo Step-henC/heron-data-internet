@@ -12,13 +12,10 @@ import generatePDF from "react-to-pdf";
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [outlierArr, setOutlierArr] = useState([]);
   const [listOfPeptideMaps, setListOfPeptideMaps] = useState([]);
+  const [justifyCont, setJustifyCont] = useState('space-between')
   const targetRef = useRef(null)
 
-  useEffect(() => {
-document.addEventListener('open', () => console.log('unloaded'))
-
-
-  }, [])
+  
 
   const toPDF = () => {
    // const whatToGenerate = document.getElementById("")
@@ -166,9 +163,9 @@ document.addEventListener('open', () => console.log('unloaded'))
           listOfOutliers[listOfOutliers.length - 1].RatioAvg = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].QuantAvg = quantGrpAvg;
           listOfOutliers[listOfOutliers.length - 1].RatioCove =
-            std(ratioSum) / outlierGrpAvg;
+            (std(ratioSum) / outlierGrpAvg);
           listOfOutliers[listOfOutliers.length - 1].QuantCove =
-            std(quantSum) / quantGrpAvg; //at the last item in arr, create an outlier prop equal to avg
+            (std(quantSum) / quantGrpAvg); //at the last item in arr, create an outlier prop equal to avg
           //at the last item in arr, create an outlier prop equal to avg
 
           //for line charts
@@ -192,6 +189,9 @@ document.addEventListener('open', () => console.log('unloaded'))
     }
 
     setListOfPeptideMaps(uniqueNames);
+    if (uniqueNames.length === 1) {
+      setJustifyCont('flex-start')
+    }
   }, [fileData]);
 
   return (
@@ -227,11 +227,12 @@ document.addEventListener('open', () => console.log('unloaded'))
                   <button className="button-button-submit" onClick={toPDF}>Export PDF</button>
       </div>
       <div
+      className="line-chart-div"
       ref={targetRef}
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: `${justifyCont}`,
           flexWrap: "wrap",
         }}
        >

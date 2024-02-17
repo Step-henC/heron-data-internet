@@ -18,11 +18,8 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
     arr.push(tempArr);
   });
   const xy = regression.linear(arr, { precision: 15 });
-  
 
   return (
-   
-
     <VictoryChart
       width={700}
       height={400}
@@ -34,10 +31,10 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
       containerComponent={<VictoryContainer responsive={false} />}
     >
       <VictoryLegend
-      standalone={"false"}
+        standalone={"false"}
         x={50}
         y={20}
-        title={[peptideName, `${xy.string}`, `r2: ${xy.r2}`]}
+        title={[peptideName, `${xy.string}`, `R2: ${xy.r2}`]}
         titleComponent={
           <VictoryLabel
             style={[{ fontSize: 20 }, { fontSize: 15 }, { fontSize: 15 }]}
@@ -62,7 +59,7 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         ]}
       />
       <VictoryScatter
-      standalone={false}
+        standalone={false}
         symbol={({ datum }) =>
           datum?.Replicate.match(/(std)/gi) ? "circle" : "triangleUp"
         }
@@ -83,7 +80,7 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         }}
       />
       <VictoryLine
-      standalone={false}
+        standalone={false}
         size={5}
         style={{ data: { fill: "tomato" } }}
         data={dataForLineGraph}
@@ -100,7 +97,5 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         axisLabelComponent={<VictoryLabel textAnchor="start" dy={20} />}
       />
     </VictoryChart>
-  
-
   );
 }
