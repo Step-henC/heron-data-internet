@@ -161,7 +161,7 @@ startRef.current.click()
           alt="logo"
           src={heron}
         />
-          <h5 style={{color: 'white', paddingBottom: '0', marginTop: "0.7em"}}>Save time analyzing Skyline standard calibration curves</h5>
+          <h5 id="tagline" style={{color: 'white', paddingBottom: '0', marginTop: "0.7em", textAlign: "center"}}>Save time analyzing Skyline standard calibration curves</h5>
 
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.7em auto 0 auto'}}>
         <button ref={startRef} onClick={showForm} className="button-button">

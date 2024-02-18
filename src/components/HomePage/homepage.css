@@ -18,19 +18,24 @@
   overflow: auto;
 }
 
+
+
 @media only screen and (max-width: 1042px) {
   #heron-main-logo {
     width: 60vw;
     min-width: 70vw;
   }
+
 }
 
-@media only screen and (max-width: 840px) {
+@media only screen and (max-height: 840px) {
   #heron-main-logo {
     width: 90vw;
-    min-width: 70vw;
+    min-width: 30vw;
   }
 }
+
+
 
 small > strong,
 small > strong > a {
