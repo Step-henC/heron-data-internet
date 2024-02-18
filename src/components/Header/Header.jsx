@@ -4,10 +4,12 @@ import Navbar from "react-bootstrap/Navbar";
 import heronlogo from "../../heronLogo.svg";
 import ListGroup from "react-bootstrap/ListGroup";
 import React, { useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import "./style.css";
 
 export default function Header() {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate()
 
   const handleShowOffCanvas = (e) => {
     e.preventDefault();
@@ -58,13 +60,19 @@ export default function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <ListGroup>
-              <ListGroup.Item action variant="dark" href="/learning">
+              <ListGroup.Item action variant="dark" 
+              onClick={() => navigate('/learning')}
+              >
                 Example Tutorial
               </ListGroup.Item>
-              <ListGroup.Item action variant="dark" href="/new">
+              <ListGroup.Item action variant="dark"
+              onClick={() => navigate('/new')} 
+              >
                 Upload New File
               </ListGroup.Item>
-              <ListGroup.Item action variant="dark" href="/contact">
+              <ListGroup.Item action variant="dark" 
+               onClick={() => navigate('/contact')} 
+              >
                 Contact Us
               </ListGroup.Item>
             </ListGroup>
