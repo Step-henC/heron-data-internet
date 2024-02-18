@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./contact.css";
 import { EMAIL_PATTERN } from "../../utils/acceptablefileformat";
 import emailjs from "@emailjs/browser";
-import { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY } from "../../utils/emailjs";
 import Layout from "../Layout/Layout";
 export default function Contact() {
   const [email, setEmail] = useState("");
@@ -37,8 +36,8 @@ export default function Contact() {
       //emailjs stuff here
 
       emailjs
-        .sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
-          publicKey: PUBLIC_KEY,
+        .sendForm(process.env.SERVICE_ID, process.env.TEMPLATE_ID, formRef.current, {
+          publicKey: process.env.PUBLIC_KEY,
         })
         .then(() => navigate("/contact/success"))
         .catch(() => navigate("/contact/error"));

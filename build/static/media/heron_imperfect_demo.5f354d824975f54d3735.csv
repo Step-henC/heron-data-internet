@@ -1,0 +1,25 @@
+Peptide,Protein,Replicate,Ratio To Standard,Peptide Retention Time,Quantification,Peptide Peak Found Ratio
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_BJCC_spiked_1,0.5716,32.38,3.9435 fmol,0.55
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_BJCC_spiked_2,0.5717,32.46,3.9955 fmol,0.5
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_BJCC_spiked_3,0.5718,32.48,3.8876 fmol,0.5
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD1_BJCC_spiked_1,0.0544,33.14,1.0968 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD1_BJCC_spiked_2,0.0545,33.28,1.1021 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD1_BJCC_spiked_3,0.0563,33.23,1.1069 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD2_BJCC_spiked_1,0.1999,33.17,1.8978 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD2_BJCC_spiked_2,0.202,33.25,1.9089 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD2_BJCC_spiked_3,0.1994,33.25,1.8947 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD3_BJCC_spiked_1,0.4323,33.14,3.1767 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD3_BJCC_spiked_2,0.4448,33.2,3.2458 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD3_BJCC_spiked_3,0.4331,33.22,3.1813 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD4_BJCC_spiked_1,2.8596,33.17,16.5375 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD4_BJCC_spiked_2,2.8918,33.27,16.7148 fmol,0.65
+ABCDEFGHI,S4Mple-Protein4,30240701_MassSpecModel_200ng_STD4_BJCC_spiked_3,3.4335,33.04,19.6765 fmol,0.65
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_JCC_spiked_1,0.5716,32.38,3.9435 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_JCC_spiked_2,0.5717,32.46,#N/A,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_JCC_spiked_3,0.5718,32.48,3.8876 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD1_BJCC_spiked_1,0.0544,33.14,1.1021 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD1_BJCC_spiked_2,0.0545,33.28,1.1069 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD1_BJCC_spiked_3,0.0563,33.23,1.0968 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD4_BJCC_spiked_1,0.1999,33.17,#N/A,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD4_BJCC_spiked_2,0.202,33.25,3.1767 fmol,0.075
+QRSTUVWXYZ,S4Mple-Protein5,30240702_MassSpecModel_200ng_STD5_BJCC_spiked_1,0.0545,33.25,16.7148 fmol,0.075

@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.08f97636.css",
+    "main.js": "/static/js/main.aea00eab.js",
+    "static/js/952.d29c76a7.chunk.js": "/static/js/952.d29c76a7.chunk.js",
+    "static/js/856.92c56a2a.chunk.js": "/static/js/856.92c56a2a.chunk.js",
+    "static/js/592.6fbf8045.chunk.js": "/static/js/592.6fbf8045.chunk.js",
+    "static/media/perfectdatatable.png": "/static/media/perfectdatatable.c15fc1c1f902a381aaf8.png",
+    "static/media/grouptable.png": "/static/media/grouptable.7e4110be485453bb7def.png",
+    "static/media/imperfectinput.png": "/static/media/imperfectinput.a1eeff9fb6f76ef1f275.png",
+    "static/media/imperfectcsv.png": "/static/media/imperfectcsv.15536f2b002b1a002bec.png",
+    "static/media/perfect-heron-sample.png": "/static/media/perfect-heron-sample.90915de10ecee6916bb6.png",
+    "static/media/heronLogo.jpg": "/static/media/heronLogo.f08c51755ccf14a6b90f.jpg",
+    "static/media/perfectline.png": "/static/media/perfectline.d6dcb23656647852f63d.png",
+    "static/media/heronLogo.svg": "/static/media/heronLogo.53ffbdc4f1d4d2ad5c1731a5fd7b3d3b.svg",
+    "static/media/logo.svg": "/static/media/logo.53ffbdc4f1d4d2ad5c1731a5fd7b3d3b.svg",
+    "static/media/heron_imperfect_demo.csv": "/static/media/heron_imperfect_demo.5f354d824975f54d3735.csv",
+    "static/media/heron_sample_demo.csv": "/static/media/heron_sample_demo.197a74d3688af83d6505.csv",
+    "index.html": "/index.html",
+    "main.08f97636.css.map": "/static/css/main.08f97636.css.map",
+    "main.aea00eab.js.map": "/static/js/main.aea00eab.js.map",
+    "952.d29c76a7.chunk.js.map": "/static/js/952.d29c76a7.chunk.js.map",
+    "856.92c56a2a.chunk.js.map": "/static/js/856.92c56a2a.chunk.js.map",
+    "592.6fbf8045.chunk.js.map": "/static/js/592.6fbf8045.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.08f97636.css",
+    "static/js/main.aea00eab.js"
+  ]
+}
