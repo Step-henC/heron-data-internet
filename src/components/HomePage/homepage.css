@@ -23,7 +23,7 @@
 @media only screen and (max-width: 1042px) {
   #heron-main-logo {
     width: 60vw;
-    min-width: 70vw;
+    min-width: 60vw;
   }
 
 }
@@ -31,7 +31,15 @@
 @media only screen and (max-height: 840px) {
   #heron-main-logo {
     width: 90vw;
-    min-width: 30vw;
+    min-width: 70vw;
+  }
+}
+
+@media only screen and (max-height: 840px) and (orientation: landscape){
+  #heron-main-logo {
+    width: 40vw;
+    min-width: 40vw;
+   
   }
 }
 
