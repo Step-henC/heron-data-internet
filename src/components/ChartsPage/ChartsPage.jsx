@@ -233,7 +233,7 @@ setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10)
             >
               Error. Either the number of replicates cannot be processed or it cannot be determined if all the samples in this run have the same 
               number of technical replicates. Please be sure not to alter the url. Failure to do so will cause the data analysis to behvave
-              unpredictably. If you feel this is in error, <a href='/'>please contact us here</a>. To return to the home page, <a href='/'>click here.</a>
+              unpredictably. If you feel this is in error, <a href='/contact'>please contact us here</a>. To return to the home page, <a href='/'>click here.</a>
             </p>
           </div>)}
          
