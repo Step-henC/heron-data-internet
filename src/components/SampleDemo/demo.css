@@ -14,6 +14,25 @@
 
 }
 
+.button-button {
+    background: white;
+    color: black;
+    margin-right: 2em;
+    padding: 0.75em;
+    border-radius: 0.4em;
+    border: none;
+  }
+
+  .button-button:hover,
+.button-button:active,
+.button-button:focus {
+  background: #6c82b7;
+  color: white;
+  scale: 1.1;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
 #perfect-sample-image {
     max-width: 70vw;
     max-height: 40vh;

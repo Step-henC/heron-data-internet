@@ -12,15 +12,16 @@ import generatePDF from "react-to-pdf";
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [outlierArr, setOutlierArr] = useState([]);
   const [listOfPeptideMaps, setListOfPeptideMaps] = useState([]);
-  const [justifyCont, setJustifyCont] = useState('space-between')
-  const targetRef = useRef(null)
+  const [justifyCont, setJustifyCont] = useState('space-between');
+  const targetRef = useRef(null);
+ 
 
-  
 
   const toPDF = () => {
    // const whatToGenerate = document.getElementById("")
     generatePDF(targetRef, {}).then(() => console.log("done"))
   }
+
 
   // const {toPDF, targetRef } = usePDF({
   //   method: 'save',
@@ -43,9 +44,11 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         "Peptide Retention Time": item["Peptide Retention Time"],
         "Ratio To Standard": item["Ratio To Standard"],
         "Ratio Average": item?.RatioAvg,
+        "Ratio Standard Deviation": item?.RSTDEV,
         "Ratio Coefficient of Variance": item?.RatioCove,
         Quantification: item?.Quantification,
         "Quantification Average": item?.QuantAvg,
+        "Quantification Standard Deviation": item?.QSTDEV,
         "Quantification Coefficient of Variance": item?.QuantCove,
       };
       newList.push(obj);
@@ -80,11 +83,13 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         const initialVal = 0; //for ratio to standard
         const initialQuantVal = 0; //for quantification
 
-        // sum array values
+        // sum array values for Ratio To Standard
         const sum = tempSum.reduce(
           (accumulator, currentVal) => accumulator + currentVal,
           initialVal
         );
+
+        //sum array values for Quantification
         const quantSum = tempQuantSum.reduce(
           (acc, currVal) => acc + currVal,
           initialQuantVal
@@ -98,16 +103,21 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         fileData[index].RatioAvg = replicateSetAverage;
         fileData[index].QuantAvg = quantSetAvg;
 
+        //standard deviation for Ratio by passing in array of values
+         fileData[index].RSTDEV = std(tempSum);
+         //stdev for Quantification
+         fileData[index].QSTDEV = std(tempQuantSum)
+
         //coefficient of variation
         fileData[index].QuantCove = std(tempQuantSum) / quantSetAvg;
-        fileData[index].RatioCove = std(tempQuantSum) / replicateSetAverage;
+        fileData[index].RatioCove = std(tempSum) / replicateSetAverage;
 
         //for line graph
         fileData[index].x = replicateSetAverage;
         fileData[index].y = quantSetAvg;
 
         //group id for grouptable
-        fileData[index].GroupID = ++groupId;
+        // fileData[index].GroupID = ++groupId;
 
         //for averagesTable
 
@@ -141,9 +151,12 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           singletonListObj[0].x = singletonListObj[0].ParsedRatioToStandard;
           singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
-          singletonListObj[0].GroupID = ++groupId;
+          // singletonListObj[0].GroupID = ++groupId;
           singletonListObj[0].QuantCove = "single sample"
           singletonListObj[0].RatioCove = "single sample"
+          singletonListObj[0].RSTDEV = "single sample"
+          singletonListObj[0].QSTDEV = "single sample"
+
 
           tempOutlierList.push(singletonListObj);
         } else {
@@ -162,6 +175,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           const quantGrpAvg = quantSum / listOfOutliers.length;
           listOfOutliers[listOfOutliers.length - 1].RatioAvg = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].QuantAvg = quantGrpAvg;
+          listOfOutliers[listOfOutliers.length - 1].RSTDEV = (std(ratioSum));
+          listOfOutliers[listOfOutliers.length - 1].QSTDEV = (std(quantSum));
+
           listOfOutliers[listOfOutliers.length - 1].RatioCove =
             (std(ratioSum) / outlierGrpAvg);
           listOfOutliers[listOfOutliers.length - 1].QuantCove =
@@ -171,7 +187,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           listOfOutliers[listOfOutliers.length - 1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].y = quantGrpAvg;
-          listOfOutliers[listOfOutliers.length - 1].GroupID = ++groupId
+          // listOfOutliers[listOfOutliers.length - 1].GroupID = ++groupId
           tempOutlierList.push(listOfOutliers); // add this list to the list
         }
       }
@@ -236,8 +252,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           flexWrap: "wrap",
         }}
        >
+
      
-        * {listOfPeptideMaps.map((pepName, ind) => (
+         {listOfPeptideMaps.map((pepName, ind) => (
           <LineCharts
           key={pepName+ind}
 
