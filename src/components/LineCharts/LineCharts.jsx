@@ -20,11 +20,6 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
   const xy = regression.linear(arr, { precision: 15 });
 
   return (
-  
-
-  
-
-    
     <VictoryChart
       width={700}
       height={400}
@@ -60,23 +55,25 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         ]}
       />
       <VictoryScatter
-      events={[
-        {
-          target: 'data',
-          eventHandlers:{
-            onClick: () => {
-              return [
-                {
-                  target: 'labels',
-                  mutation: (props) => {
-                    return  props.text === props.datum.Replicate ? null : {text: props?.datum?.Replicate}
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]}
+        events={[
+          {
+            target: "data",
+            eventHandlers: {
+              onClick: () => {
+                return [
+                  {
+                    target: "labels",
+                    mutation: (props) => {
+                      return props.text === props.datum.Replicate
+                        ? null
+                        : { text: props?.datum?.Replicate };
+                    },
+                  },
+                ];
+              },
+            },
+          },
+        ]}
         standalone={false}
         symbol={({ datum }) =>
           datum?.Replicate.match(/(std)/gi) ? "circle" : "triangleUp"
@@ -88,7 +85,6 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         data={dataForLineGraph}
         size={5}
         style={{
-    
           data: {
             fill: ({ datum }) =>
               datum?.Replicate.match(/(std)/gi) ? "tomato" : "white",
@@ -112,10 +108,12 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         axisLabelComponent={<VictoryLabel textAnchor="start" dy={-20} />}
       />
       <VictoryAxis
-        label={`Analyte Concentration (${dataForLineGraph.at(0)?.Quantification.split(" ").at(1)})`} //get unit from quantification name
+        label={`Analyte Concentration (${dataForLineGraph
+          .at(0)
+          ?.Quantification.split(" ")
+          .at(1)})`} //get unit from quantification name
         axisLabelComponent={<VictoryLabel textAnchor="start" dy={20} />}
       />
     </VictoryChart>
-    
   );
 }
