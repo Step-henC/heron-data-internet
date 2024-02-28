@@ -9,6 +9,8 @@ import perfectline from "./perfectline.png";
 import imperfectfile from "./heron_imperfect_demo.csv";
 import imperfectcsv from "./imperfectcsv.png";
 import imperfectinput from "./imperfectinput.png";
+import  Card  from "react-bootstrap/Card";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
 export default function Example() {
   const [isFileProcessed, setIsFileProcessed] = useState(true);
 
@@ -56,7 +58,26 @@ export default function Example() {
             assumptions will be discussed later. For now, let us start with a
             sterotypical skyline calibration curve csv. See the image below.
           </p>
+          {/* <Card bg="dark" className="text-center" text="white" style={{display: 'flex', flexDirection: 'column', justifyContent: "center", alignItems: 'center'}}>
+          <Card.Title>Perfect Example</Card.Title>
+
+            <Card.Img variant="top" src={perfectsample} />
+            <Card.Body>
+              <Card.Text>Please make sure 
+                <ListGroup>
+                    <ListGroupItem>column names have not been altered</ListGroupItem>
+                    <ListGroupItem> standard samples have the letters 'std' in the Replicate Name case insensitive</ListGroupItem>
+<ListGroupItem>Technical replicates are grouped together in the file. Download below</ListGroupItem>
+                </ListGroup>
+                
+              </Card.Text>
+              <button onClick={handlePerfectDownload} className="button-button">Download</button>
+              {!isFileProcessed && <Card.Text>File Download Error</Card.Text>}
+            </Card.Body>
+
+            </Card> */}
           <div className="image-download-file">
+          
             <img
               id="perfect-sample-image"
               src={perfectsample}

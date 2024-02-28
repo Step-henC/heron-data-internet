@@ -38,7 +38,7 @@ export default function AveragesTable({ tableData }) {
       omit: selected.some((item) => item.label === "Quantification"),
     },
     {
-      name: "Quant Group Avg",
+      name: "Quantification Replicate Avg",
       selector: (row) => row?.QuantAvg,
       wrap: true,
       grow: 2,
@@ -53,7 +53,7 @@ export default function AveragesTable({ tableData }) {
       omit: selected.some((item) => item.label === "Ratio To Standard"),
     },
     {
-      name: "Ratio Group Avg",
+      name: "Ratio Replicate Avg",
       selector: (row) => row?.RatioAvg,
       omit: selected.some((item) => item.label === "Ratio Group Avg"),
       grow: 2,

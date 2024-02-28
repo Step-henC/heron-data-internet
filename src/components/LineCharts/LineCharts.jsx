@@ -23,10 +23,6 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
     <VictoryChart
       width={700}
       height={400}
-      // animate={{
-      //   duration: 2000,
-      //   onLoad: { duration: 1000 },
-      // }}
       theme={VictoryTheme.material}
       containerComponent={<VictoryContainer responsive={false} />}
     >
@@ -59,6 +55,25 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         ]}
       />
       <VictoryScatter
+        events={[
+          {
+            target: "data",
+            eventHandlers: {
+              onClick: () => {
+                return [
+                  {
+                    target: "labels",
+                    mutation: (props) => {
+                      return props.text === props.datum.Replicate
+                        ? null
+                        : { text: props?.datum?.Replicate };
+                    },
+                  },
+                ];
+              },
+            },
+          },
+        ]}
         standalone={false}
         symbol={({ datum }) =>
           datum?.Replicate.match(/(std)/gi) ? "circle" : "triangleUp"
@@ -93,7 +108,10 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         axisLabelComponent={<VictoryLabel textAnchor="start" dy={-20} />}
       />
       <VictoryAxis
-        label="Analyte Concentration (fmol)"
+        label={`Analyte Concentration (${dataForLineGraph
+          .at(0)
+          ?.Quantification.split(" ")
+          .at(1)})`} //get unit from quantification name
         axisLabelComponent={<VictoryLabel textAnchor="start" dy={20} />}
       />
     </VictoryChart>
