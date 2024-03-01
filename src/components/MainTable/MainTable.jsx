@@ -8,24 +8,21 @@ import ExportButton from "../ExportButton/ExportButton";
 import { unparse } from "papaparse";
 import generatePDF from "react-to-pdf";
 
-
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [outlierArr, setOutlierArr] = useState([]);
   const [listOfPeptideMaps, setListOfPeptideMaps] = useState([]);
-  const [justifyCont, setJustifyCont] = useState('space-between');
+  const [justifyCont, setJustifyCont] = useState("space-between");
+  const [showData, setShowData] = useState(false);
   const targetRef = useRef(null);
- 
-
 
   const toPDF = () => {
-   // const whatToGenerate = document.getElementById("")
-    generatePDF(targetRef, {}).then(() => console.log("done"))
-  }
-
+    // const whatToGenerate = document.getElementById("")
+    generatePDF(targetRef, {}).then(() => console.log("done"));
+  };
 
   // const {toPDF, targetRef } = usePDF({
   //   method: 'save',
-    
+
   // })
   let groupId = 0;
 
@@ -65,8 +62,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
     testLink.click();
   };
 
-
-
   useEffect(() => {
     let tempSum = []; //for ratio group average
     let tempQuantSum = []; //for quantification group avg
@@ -104,9 +99,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         fileData[index].QuantAvg = quantSetAvg;
 
         //standard deviation for Ratio by passing in array of values
-         fileData[index].RSTDEV = std(tempSum);
-         //stdev for Quantification
-         fileData[index].QSTDEV = std(tempQuantSum)
+        fileData[index].RSTDEV = std(tempSum);
+        //stdev for Quantification
+        fileData[index].QSTDEV = std(tempQuantSum);
 
         //coefficient of variation
         fileData[index].QuantCove = std(tempQuantSum) / quantSetAvg;
@@ -152,11 +147,10 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           singletonListObj[0].x = singletonListObj[0].ParsedRatioToStandard;
           singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
           // singletonListObj[0].GroupID = ++groupId;
-          singletonListObj[0].QuantCove = "single sample"
-          singletonListObj[0].RatioCove = "single sample"
-          singletonListObj[0].RSTDEV = "single sample"
-          singletonListObj[0].QSTDEV = "single sample"
-
+          singletonListObj[0].QuantCove = "single sample";
+          singletonListObj[0].RatioCove = "single sample";
+          singletonListObj[0].RSTDEV = "single sample";
+          singletonListObj[0].QSTDEV = "single sample";
 
           tempOutlierList.push(singletonListObj);
         } else {
@@ -175,13 +169,13 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           const quantGrpAvg = quantSum / listOfOutliers.length;
           listOfOutliers[listOfOutliers.length - 1].RatioAvg = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].QuantAvg = quantGrpAvg;
-          listOfOutliers[listOfOutliers.length - 1].RSTDEV = (std(ratioSum));
-          listOfOutliers[listOfOutliers.length - 1].QSTDEV = (std(quantSum));
+          listOfOutliers[listOfOutliers.length - 1].RSTDEV = std(ratioSum);
+          listOfOutliers[listOfOutliers.length - 1].QSTDEV = std(quantSum);
 
           listOfOutliers[listOfOutliers.length - 1].RatioCove =
-            (std(ratioSum) / outlierGrpAvg);
+            std(ratioSum) / outlierGrpAvg;
           listOfOutliers[listOfOutliers.length - 1].QuantCove =
-            (std(quantSum) / quantGrpAvg); //at the last item in arr, create an outlier prop equal to avg
+            std(quantSum) / quantGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           //at the last item in arr, create an outlier prop equal to avg
 
           //for line charts
@@ -206,14 +200,12 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
     setListOfPeptideMaps(uniqueNames);
     if (uniqueNames.length === 1) {
-      setJustifyCont('flex-start')
+      setJustifyCont("flex-start");
     }
   }, [fileData]);
 
   return (
     <>
-  
-    
       <AveragesTable tableData={[...fileData].concat(outlierArr.flat())} />
 
       <div id="separate_tables" key={"another-key-for-uniqueness"}></div>
@@ -240,24 +232,34 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           justifyContent: "flex-end",
         }}
       >
-                  <button className="button-button-submit" onClick={toPDF}>Export PDF</button>
+        <button
+          className="button-button-hide"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowData(!showData);
+          }}
+        >
+          {showData ? "Hide Data" : "Show Data"}
+        </button>
+
+        <button className="button-button-submit" onClick={toPDF}>
+          Export PDF
+        </button>
       </div>
       <div
-      className="line-chart-div"
-      ref={targetRef}
+        className="line-chart-div"
+        ref={targetRef}
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: `${justifyCont}`,
           flexWrap: "wrap",
         }}
-       >
-
-     
-         {listOfPeptideMaps.map((pepName, ind) => (
+      >
+        {listOfPeptideMaps.map((pepName, ind) => (
           <LineCharts
-          key={pepName+ind}
-
+        showData={showData}
+            key={pepName + ind}
             peptideName={pepName}
             dataForLineGraph={[...fileData]
               .concat(outlierSampleFromFile.flat())
@@ -265,7 +267,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
                 (rep) => rep.RatioAvg !== undefined && rep?.Peptide === pepName
               )}
           />
-        ))} 
+        ))}
       </div>
     </>
   );

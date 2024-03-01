@@ -11,7 +11,7 @@ import {
 import "./line.css";
 
 import regression from "regression";
-export default function LineCharts({ peptideName, dataForLineGraph }) {
+export default function LineCharts({ peptideName, dataForLineGraph, showData }) {
   const arr = [];
   dataForLineGraph.forEach((rep) => {
     let tempArr = [rep.y, rep.x];
@@ -56,6 +56,7 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
       />
       <VictoryScatter
         events={[
+      
           {
             target: "data",
             eventHandlers: {
@@ -78,10 +79,10 @@ export default function LineCharts({ peptideName, dataForLineGraph }) {
         symbol={({ datum }) =>
           datum?.Replicate.match(/(std)/gi) ? "circle" : "triangleUp"
         }
-        labels={({ datum }) => [
+        labels={({ datum }) => showData ? [
           `y: ${Math.round((datum.y + Number.EPSILON) * 100) / 100}`,
           `x: ${Math.round((datum.x + Number.EPSILON) * 100) / 100}`,
-        ]}
+        ] : ""}
         data={dataForLineGraph}
         size={5}
         style={{

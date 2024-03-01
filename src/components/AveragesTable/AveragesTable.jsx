@@ -8,7 +8,6 @@ export default function AveragesTable({ tableData }) {
     {
       name: "Peptide Name",
       selector: (row) => row?.Peptide,
-      sortable: true,
       omit: selected.some((item) => item.label === "Peptide Name"),
     },
     {
