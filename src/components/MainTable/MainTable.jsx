@@ -7,12 +7,14 @@ import "./maintable.css";
 import ExportButton from "../ExportButton/ExportButton";
 import { unparse } from "papaparse";
 import generatePDF from "react-to-pdf";
+import GroupTableSubheader from "../GroupTable/GroupTableSubheader";
 
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [outlierArr, setOutlierArr] = useState([]);
   const [listOfPeptideMaps, setListOfPeptideMaps] = useState([]);
   const [justifyCont, setJustifyCont] = useState("space-between");
   const [showData, setShowData] = useState(false);
+  const [selectedCol, setSelectedCol] = useState([])
   const targetRef = useRef(null);
 
   const toPDF = () => {
@@ -210,16 +212,20 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
       <div id="separate_tables" key={"another-key-for-uniqueness"}></div>
       <div
+      className="group-buttons-div"
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "flex-end",
+          margin: "0 5em 0 .2em"
         }}
       >
+        <GroupTableSubheader selectFunction={(e) => setSelectedCol(e)}/>
         <ExportButton onExport={exportCSV} />
       </div>
 
       <GroupTable
+      selectedCol={selectedCol}
         groupData={[...fileData]
           .concat(outlierArr.flat())
           .filter((rep) => rep.RatioAvg !== undefined)}

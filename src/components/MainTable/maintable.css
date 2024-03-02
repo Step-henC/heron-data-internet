@@ -35,3 +35,8 @@
     transition: 0.3s;
     cursor: pointer;
   }
+
+  .group-buttons-div > * {
+
+    margin: auto .4em auto .4em;
+  }

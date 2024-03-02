@@ -1,31 +1,18 @@
 import DataTable from "react-data-table-component";
 import React, { useState, useMemo } from "react";
 import GroupTableSubheader from "./GroupTableSubheader";
-export default function GroupTable({ groupData }) {
-  const [selected, setSelected] = useState([]);
+export default function GroupTable({ groupData, selectedCol }) {
 
-  const onSorting = (input) => {
-    
-    switch(input){
-      case input === 'Replicate': 
-      return groupData.sort((x,y) => x.Replicate - y.Replicate)
-      default:
-    }
-   
-  }
+
  
   const columns = [
-    // {
-    //   name: "Group ID for Technical Replicate",
-    //   selector: (row) => row?.GroupID + " " + row?.Peptide,
-    //   sortable: false,
-    // },
     {
       name: "Replicate Name",
       selector: (row) => row?.Replicate,
       wrap: true,
-      sortable: true,
+      sortable: false,
       reorder: true,
+      
     },
 
     {
@@ -35,7 +22,7 @@ export default function GroupTable({ groupData }) {
       grow: 2,
       sortable: false,
       reorder: true,
-      omit: selected.some(
+      omit: selectedCol.some(
         (item) => item.label === "Quantification Average (Y axis)"
       ),
     },
@@ -45,7 +32,7 @@ export default function GroupTable({ groupData }) {
       wrap: true,
       sortable: false,
       reorder: true,
-      omit: selected.some((item) => item.label === "Quantification STDEV"),
+      omit: selectedCol.some((item) => item.label === "Quantification STDEV"),
     },
     {
       name: "Quantification CV",
@@ -53,7 +40,7 @@ export default function GroupTable({ groupData }) {
       wrap: true,
       sortable: false,
       reorder: true,
-      omit: selected.some((item) => item.label === "Quantification CV"),
+      omit: selectedCol.some((item) => item.label === "Quantification CV"),
     },
     {
       name: "Ratio Average (X axis)",
@@ -61,37 +48,31 @@ export default function GroupTable({ groupData }) {
       sortable: false,
       grow: 2,
       reorder: true,
-      omit: selected.some((item) => item.label === "Ratio Average (X axis)"),
+      omit: selectedCol.some((item) => item.label === "Ratio Average (X axis)"),
     },
     {
       name: "Ratio STDEV",
       selector: (row) => row?.RSTDEV,
       sortable: false,
       reorder: true,
-      omit: selected.some((item) => item.label === "Ratio STDEV"),
+      omit: selectedCol.some((item) => item.label === "Ratio STDEV"),
     },
     {
       name: "Ratio CV",
       selector: (row) => row?.RatioCove,
       sortable: false,
       reorder: true,
-      omit: selected.some((item) => item.label === "Ratio CV"),
+      omit: selectedCol.some((item) => item.label === "Ratio CV"),
     },
   ];
 
-  const subHeaderMemo = useMemo(
-    () => <GroupTableSubheader  selectFunction={(e) => setSelected(e)} />,
-    []
-  );
+
 
   return (
     <DataTable
-      subHeader
-      subHeaderComponent={subHeaderMemo}
       key={"group-averages"}
       keyField="Replicate"
       pagination
-      sortable
       bordered
       striped
       columns={columns}
