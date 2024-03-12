@@ -1,8 +1,6 @@
 # Heron Data
 
-Website: https://heron-data-internet-step-hencs-projects.vercel.app/
-
-working out domain name now
+Website: herondata.app
 
 This is a refactor of this https://github.com/Step-henC/Heron_Data_Installer
 
