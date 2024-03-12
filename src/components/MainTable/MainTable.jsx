@@ -217,7 +217,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           display: "flex",
           flexDirection: "row",
           justifyContent: "flex-end",
-          margin: "0 5em 0 .2em"
+          margin: "0 0 0 .2em"
         }}
       >
         <GroupTableSubheader selectFunction={(e) => setSelectedCol(e)}/>

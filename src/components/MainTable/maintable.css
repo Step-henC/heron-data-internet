@@ -38,5 +38,6 @@
 
   .group-buttons-div > * {
 
-    margin: auto .4em auto .4em;
+    margin-left: 2em;
+    /* margin-right: 0; */
   }

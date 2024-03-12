@@ -9,7 +9,7 @@ import perfectline from "./perfectline.png";
 import imperfectfile from "./heron_imperfect_demo.csv";
 import imperfectcsv from "./imperfectcsv.png";
 import imperfectinput from "./imperfectinput.png";
-import  Card  from "react-bootstrap/Card";
+import Card from "react-bootstrap/Card";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 export default function Example() {
   const [isFileProcessed, setIsFileProcessed] = useState(true);
@@ -77,7 +77,6 @@ export default function Example() {
 
             </Card> */}
           <div className="image-download-file">
-          
             <img
               id="perfect-sample-image"
               src={perfectsample}
