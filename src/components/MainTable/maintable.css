@@ -27,14 +27,15 @@
   }
 
   .button-button-hide:hover,
-  .button-button-hide:active,
-  .button-button-hide:focus {
+  .button-button-hide:active {
     background: #e19b62;
     color: white;
     scale: 1.1;
     transition: 0.3s;
     cursor: pointer;
   }
+
+ 
 
   .group-buttons-div > * {
 
