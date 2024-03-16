@@ -5,7 +5,7 @@ export const ACCEPTABLE_FILE_FORMATS = [
 ];
 
 export const BAD_RUNS_PLACEHOLDER =
-  "Please make sure the EXACT names are provided. Copy and paste name for certainty. Format samples in same group in parenthesis, separated by commas. If single sample, place in parenthesis alone";
+  "Please copy and paste the exact sample names as they are listed in the .csv file provided. List the sample names formatted and keeping samples in the same group in parenthesis, separating each sample by a comma. If it is a single sample without the designated number of technical replicates, place in parenthesis alone.";
 
 export const EXPECTED_FIELD_NAMES = [
   "Replicate",

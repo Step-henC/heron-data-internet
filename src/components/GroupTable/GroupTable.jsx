@@ -26,7 +26,7 @@ export default function GroupTable({ groupData, selectedCol }) {
     },
 
     {
-      name: "Quantification Average (Y axis)",
+      name: "Quantification Average (X axis)",
       selector: (row) => row?.QuantAvg,
       wrap: true,
       grow: 2,
@@ -34,7 +34,7 @@ export default function GroupTable({ groupData, selectedCol }) {
       sortFunction: sortQuantAvg,
       reorder: true,
       omit: selectedCol.some(
-        (item) => item.label === "Quantification Average (Y axis)"
+        (item) => item.label === "Quantification Average (X axis)"
       ),
     },
     {
@@ -85,6 +85,7 @@ export default function GroupTable({ groupData, selectedCol }) {
   return (
     <DataTable
       key={"group-averages"}
+      title="Table 2. Data Statistics"
       pagination
       bordered
       striped

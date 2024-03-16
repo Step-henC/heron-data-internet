@@ -105,8 +105,8 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData }) 
       />
       <VictoryAxis
         dependentAxis
-        label={"Light Heavy Peak Area Ratio"}
-        axisLabelComponent={<VictoryLabel textAnchor="start" dy={-20} />}
+        label={"Light:Heavy Peak Area Ratio"}
+        axisLabelComponent={<VictoryLabel textAnchor="start" dy={-30} />}
       />
       <VictoryAxis
         label={`Analyte Concentration (${dataForLineGraph

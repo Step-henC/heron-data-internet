@@ -27,8 +27,7 @@
   }
   
   .button-button:hover,
-  .button-button:active,
-  .button-button:focus {
+  .button-button:active {
     background: #6c82b7;
     color: white;
     scale: 1.1;
@@ -46,8 +45,7 @@
   }
   
   .button-button-submit:hover,
-  .button-button-submit:active,
-  .button-button-submit:focus {
+  .button-button-submit:active {
     background: #6c82b7;
     color: white;
     scale: 1.1;
@@ -65,8 +63,7 @@
   }
   
   .button-button-cancel:hover,
-  .button-button-cancel:active,
-  .button-button-cancel:focus {
+  .button-button-cancel:active{
     background: #6c82b7;
     color: white;
     scale: 1.1;
