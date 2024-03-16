@@ -6,68 +6,108 @@ export default function AveragesTable({ tableData }) {
   const paginationComponentOptions = {
     selectAllRowsItem: true,
     selectAllRowsItemText: "All",
-  }
+  };
+
+  const sortQuant = (a, b) => a?.ParsedQuantification - b?.ParsedQuantification;
+
+  const sortRatioStandard = (a, b) =>
+    a.ParsedRatioToStandard - b.ParsedRatioToStandard;
+
+  const sortRetentionTime = (rowA, rowB) => {
+    const a = parseFloat(rowA["Peptide Retention Time"]);
+    const b = parseFloat(rowB["Peptide Retention Time"]);
+
+    if (a > b) {
+      return 1;
+    }
+    if (b > a) {
+      return -1;
+    }
+    return 0;
+  };
+
+  const sortPeakRatio = (rowA, rowB) => {
+    const a = parseFloat(rowA["Peptide Peak Found Ratio"]);
+    const b = parseFloat(rowB["Peptide Peak Found Ratio"]);
+
+    if (a > b) {
+      return 1;
+    }
+    if (b > a) {
+      return -1;
+    }
+    return 0;
+  };
+
   const columns = [
     {
-      id: "Peptide",
       name: "Peptide Name",
       selector: (row) => row?.Peptide,
+      reorder: true,
       omit: selected.some((item) => item.label === "Peptide Name"),
     },
     {
-      id: "Replicate",
       name: "Replicate",
       selector: (row) => row?.Replicate,
       wrap: true,
+      reorder: true,
       omit: selected.some((item) => item.label === "Replicate"),
     },
     {
-      id: "Peptide Peak Found Ratio",
       name: "Peptide Peak Ratio",
       selector: (row) => row["Peptide Peak Found Ratio"],
+      sortable: true,
+      sortFunction: sortPeakRatio,
+      reorder: true,
       omit: selected.some((item) => item.label === "Peptide Peak Ratio"),
     },
     {
-      id: "Peptide Retention Time",
       name: "Peptide Retention Time",
       selector: (row) => row["Peptide Retention Time"],
+      sortable: true,
+      sortFunction: sortRetentionTime,
+      reorder: true,
       omit: selected.some((item) => item.label === "Peptide Retention Time"),
     },
     {
-      id: "Protein",
       name: "Protein",
       selector: (row) => row?.Protein,
+      reorder: true,
       omit: selected.some((item) => item.label === "Protein"),
     },
     {
-      id: "Quantification",
       name: "Quantification",
       selector: (row) => row?.Quantification,
+      sortable: true,
+      sortFunction: sortQuant,
+      reorder: true,
       omit: selected.some((item) => item.label === "Quantification"),
     },
     {
-      id: "QuantAvg",
       name: "Quantification Replicate Avg",
       selector: (row) => row?.QuantAvg,
       wrap: true,
       grow: 2,
+      reorder: true,
       omit: selected.some((item) => item.label === "Quant Group Avg"),
       style: {
         backgroundColor: "rgba(181, 192, 216, 1)",
       },
     },
     {
-      id: "Ratio To Standard",
       name: "Ratio To Standard",
       selector: (row) => row["Ratio To Standard"],
+      sortable: true,
+      sortFunction: sortRatioStandard,
+      reorder: true,
       omit: selected.some((item) => item.label === "Ratio To Standard"),
     },
     {
-      id: "RatioAvg",
       name: "Ratio Replicate Avg",
       selector: (row) => row?.RatioAvg,
       omit: selected.some((item) => item.label === "Ratio Group Avg"),
       grow: 2,
+      reorder: true,
       style: {
         backgroundColor: "rgba(181, 192, 216, 1)",
       },
@@ -87,11 +127,7 @@ export default function AveragesTable({ tableData }) {
       pagination
       columns={columns}
       paginationComponentOptions={paginationComponentOptions}
-      data={tableData
-        .map((item) => {
-        return { ...item, id: item?.Replicate };
-      })
-    }
+      data={tableData}
     />
   );
 }

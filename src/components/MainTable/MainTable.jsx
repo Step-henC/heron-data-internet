@@ -26,7 +26,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   //   method: 'save',
 
   // })
-  let groupId = 0;
 
   const exportCSV = () => {
     const wholeData = [...fileData]
@@ -67,9 +66,10 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   useEffect(() => {
     let tempSum = []; //for ratio group average
     let tempQuantSum = []; //for quantification group avg
-    const replicateSet = repNum;
+    const replicateSet = repNum; //group size
 
     for (let index = 0; index < fileData.length; index++) {
+      fileData[index].id = index; //need this for datatables
       tempSum.push(fileData[index]?.ParsedRatioToStandard);
       tempQuantSum.push(fileData[index]?.ParsedQuantification);
 
@@ -113,8 +113,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         fileData[index].x = replicateSetAverage;
         fileData[index].y = quantSetAvg;
 
-        //group id for grouptable
-        // fileData[index].GroupID = ++groupId;
+        
 
         //for averagesTable
 
@@ -240,10 +239,11 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
       >
         <button
           className="button-button-hide"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowData(!showData);
-          }}
+          onClick={() => 
+            // e.preventDefault();
+            setShowData(!showData)
+          
+        }
         >
           {showData ? "Hide Data" : "Show Data"}
         </button>

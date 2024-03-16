@@ -1,16 +1,8 @@
 # Heron Data
 
-Website: https://heron-data-internet-step-hencs-projects.vercel.app/
-
-working out domain name now
+Website: https://herondata.app
 
 This is a refactor of this https://github.com/Step-henC/Heron_Data_Installer
-
-Below is progress video with error handling and graphing data in tables and line graphs. The navbar gradient is supposed to be the color gradient of a typical grey heron [reference here](https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGrey_heron&psig=AOvVaw2ApKxBsoVZspzv-Et2hLWw&ust=1707937898590000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJiCpdCCqYQDFQAAAAAdAAAAABAE) ... I am not offended if you did not pick up on that.
-
-
-
-
 
 
 ### What Is This
@@ -33,3 +25,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Future Considerations
 
 - PDF api does not allow page breaks (using react-to-pdf). Since it takes a screenshot and pdf-izes that. Will look into react-pdf api in later iterations of app
+
+
+### Running locally
+
+-Please make sure node is installed and navigate to root directory in the cli.
+
+- Open terminal or cli in root directory and run "npm ci" then "npm start"
