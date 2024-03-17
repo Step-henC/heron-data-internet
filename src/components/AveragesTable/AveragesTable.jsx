@@ -47,7 +47,7 @@ export default function AveragesTable({ tableData }) {
       omit: selected.some((item) => item.label === "Peptide Name"),
     },
     {
-      name: "Replicate",
+      name: "Replicate Name",
       selector: (row) => row?.Replicate,
       wrap: true,
       reorder: true,
@@ -59,6 +59,7 @@ export default function AveragesTable({ tableData }) {
       sortable: true,
       sortFunction: sortPeakRatio,
       reorder: true,
+      width: "10em",
       omit: selected.some((item) => item.label === "Peptide Peak Ratio"),
     },
     {
@@ -103,7 +104,7 @@ export default function AveragesTable({ tableData }) {
       omit: selected.some((item) => item.label === "Ratio To Standard"),
     },
     {
-      name: "Ratio Replicate Avg",
+      name: "Peptide Result Ratio Avg",
       selector: (row) => row?.RatioAvg,
       omit: selected.some((item) => item.label === "Ratio Group Avg"),
       grow: 2,
@@ -121,6 +122,7 @@ export default function AveragesTable({ tableData }) {
 
   return (
     <DataTable
+      title="Table 1. Data Averages"
       subHeader
       subHeaderComponent={subHeaderMemo}
       key={"first-table-key-here"}

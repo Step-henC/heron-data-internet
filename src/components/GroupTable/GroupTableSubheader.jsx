@@ -4,12 +4,12 @@ export default function GroupTableSubheader({ selectFunction }) {
   const options = [
     { value: "Replicate Name", label: "Replicate Name" },
     {
-      value: "Quantification Average (Y axis)",
-      label: "Quantification Average (Y axis)",
+      value: "Quantification Average (X axis)",
+      label: "Quantification Average (X axis)",
     },
     { value: "Quantification STDEV", label: "Quantification STDEV" },
     { value: "Quantification CV", label: "Quantification CV" },
-    { value: "Ratio Average (X axis)", label: "Ratio Average (X axis)" },
+    { value: "Ratio Average (Y axis)", label: "Ratio Average (Y axis)" },
     { value: "Ratio STDEV", label: "Ratio STDEV" },
     { value: "Ratio CV", label: "Ratio CV" },
   ];

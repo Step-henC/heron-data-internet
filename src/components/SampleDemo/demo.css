@@ -24,8 +24,7 @@
   }
 
   .button-button:hover,
-.button-button:active,
-.button-button:focus {
+.button-button:active {
   background: #6c82b7;
   color: white;
   scale: 1.1;
@@ -42,6 +41,6 @@
     margin: .5em auto 0 auto;
 }
 
-.download-p:hover, .download-p:active, .download-p:focus {
+.download-p:hover, .download-p:active {
     font-size: large;
 }

@@ -25,11 +25,6 @@ export default function ChartsPage() {
     let possibleInterval;
     const sessionFile = JSON.parse(sessionStorage.getItem("file"));
     
-     
-
-    
-    
-
     if (sessionFile === null || !Array.isArray(sessionFile)) {
       setIsFileErrorMessage(true);
 

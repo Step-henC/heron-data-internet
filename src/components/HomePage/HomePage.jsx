@@ -155,6 +155,7 @@ startRef.current.click()
           
         }}
       >
+
         <img
           id={"heron-main-logo"}
           aria-label="heron logo"
@@ -162,6 +163,7 @@ startRef.current.click()
           src={heron}
         />
           <h5 id="tagline" style={{color: 'white', paddingBottom: '0', marginTop: "0.7em", textAlign: "center"}}>Save time analyzing Skyline standard calibration curves</h5>
+          <h6 id="tagline" style={{color: 'white', paddingBottom: '0', marginTop: "0.7em", textAlign: "center"}}><em>Improve Rigor and Reproducibility of Biomedical Proteomics</em></h6>
 
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.7em auto 0 auto'}}>
         <button ref={startRef} onClick={showForm} className="button-button">
@@ -227,7 +229,7 @@ startRef.current.click()
 
             <li className="form-row">
               <label aria-label="select number of replicates" htmlFor="rep-num">
-                Technical Replicates
+               Number of Technical Replicates
               </label>
               <select
                 id="rep-num"
@@ -253,7 +255,7 @@ startRef.current.click()
               >
                 {technicalReplicate > 1 ? "Are" : "Is"} there{" "}
                 <strong>{technicalReplicate}</strong> replicate
-                {technicalReplicate > 1 ? "s" : ""} for each sample?
+                {technicalReplicate > 1 ? "s" : ""} for all samples in the document?
               </Form.Label>
               <Form.Check
                 id="good-run"
@@ -269,7 +271,7 @@ startRef.current.click()
                   aria-describedby="bad-sample-list-requirements"
                   htmlFor="bad-sample-list"
                 >
-                  Provide List of Samples without the Specified Replicates
+                  Provide List of Samples without the Specified Number of Replicates
                 </label>
                 <br/>
                 <small id="bad-sample-list-requirements">

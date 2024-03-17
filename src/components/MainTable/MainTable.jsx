@@ -15,17 +15,16 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [justifyCont, setJustifyCont] = useState("space-between");
   const [showData, setShowData] = useState(false);
   const [selectedCol, setSelectedCol] = useState([])
+  const [pdfLoading, setPdfLoading] = useState(false)
+  const [csvLoading, setCsvLoading] = useState(false)
   const targetRef = useRef(null);
 
   const toPDF = () => {
+    setPdfLoading(true)
     // const whatToGenerate = document.getElementById("")
-    generatePDF(targetRef, {}).then(() => console.log("done"));
+    generatePDF(targetRef, {}).then(() => setPdfLoading(false));
   };
 
-  // const {toPDF, targetRef } = usePDF({
-  //   method: 'save',
-
-  // })
 
   const exportCSV = () => {
     const wholeData = [...fileData]
@@ -61,6 +60,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
     var testLink = document.createElement("a");
     testLink.href = csvURL;
     testLink.click();
+  
   };
 
   useEffect(() => {
@@ -220,7 +220,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         }}
       >
         <GroupTableSubheader selectFunction={(e) => setSelectedCol(e)}/>
-        <ExportButton onExport={exportCSV} />
+        <ExportButton buttonText={"Export CSV"} onExport={exportCSV} />
       </div>
 
       <GroupTable
@@ -249,7 +249,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         </button>
 
         <button className="button-button-submit" onClick={toPDF}>
-          Export PDF
+          {pdfLoading ? "Loading" : "Export PDF"}
         </button>
       </div>
       <div
