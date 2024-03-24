@@ -3,29 +3,26 @@ import React, { useState, useEffect } from "react";
 import MainTable from "../MainTable/MainTable";
 import Layout from "../Layout/Layout";
 import { EXPECTED_FIELD_NAMES } from "../../utils/acceptablefileformat";
-import './chartspage.css'
+import "./chartspage.css";
 import { useParams } from "react-router-dom";
-import bigInt from "big-integer";
 
 export default function ChartsPage() {
   const [pageReloadFile, setPageReloadFile] = useState([]);
   const [isFileErrorMessage, setIsFileErrorMessage] = useState(false);
   const [seconds, setSeconds] = useState(10);
-  const [allSameUrlGood, setAllSameUrlGood] = useState(true)
-  const [replicateNumGood, setReplicateNumGood] = useState(true)
-  const [errorWithBadSamples, setErrorWithBadSamples] = useState(false)
-  const [outlierSampleFromFile, setOutlierSampleFromFile] = useState([]) 
+  const [allSameUrlGood, setAllSameUrlGood] = useState(true);
+  const [replicateNumGood, setReplicateNumGood] = useState(true);
+  const [errorWithBadSamples, setErrorWithBadSamples] = useState(false);
+  const [outlierSampleFromFile, setOutlierSampleFromFile] = useState([]);
 
   let navigate = useNavigate();
-  const {allSame} = useParams();
-  const {repNum} = useParams();
+  const { allSame } = useParams();
+  const { repNum } = useParams();
 
-
-  
   useEffect(() => {
     let possibleInterval;
     const sessionFile = JSON.parse(sessionStorage.getItem("file"));
-    
+
     if (sessionFile === null || !Array.isArray(sessionFile)) {
       setIsFileErrorMessage(true);
 
@@ -38,9 +35,9 @@ export default function ChartsPage() {
     } else {
       //if it is an array, check that the file has the expected columns
       const listOfFileFields = Object.keys(sessionFile.at(0));
-      const fileNotOK = listOfFileFields.some(
-        (item) => !EXPECTED_FIELD_NAMES.includes(item)
-      ) || listOfFileFields.length !== EXPECTED_FIELD_NAMES.length;
+      const fileNotOK =
+        listOfFileFields.some((item) => !EXPECTED_FIELD_NAMES.includes(item)) ||
+        listOfFileFields.length !== EXPECTED_FIELD_NAMES.length;
       if (fileNotOK) {
         setIsFileErrorMessage(true);
         possibleInterval = setInterval(() => {
@@ -50,122 +47,141 @@ export default function ChartsPage() {
           clearInterval(possibleInterval);
         };
       } else {
-        if (parseInt(allSame) === 1) { // move logic to after sessionfile === null check
-    
-          // get bad sample list
-            
-          const bad = JSON.parse(sessionStorage.getItem('badsamples'))
+        if (parseInt(allSame) === 1) {
+          // move logic to after sessionfile === null check
 
-  
-          if (typeof bad !== 'string' || bad === null) {
-            setErrorWithBadSamples(true)
+          // get bad sample list
+
+          const bad = JSON.parse(sessionStorage.getItem("badsamples"));
+
+          if (typeof bad !== "string" || bad === null) {
+            setErrorWithBadSamples(true);
           } else {
-           
-    
             //clean up list so it is only names and no parentesis or anything
-            const samplesToFilter = bad.split(')').filter((str) => str !== "").map((str) => {const newstr = str.replace(/[()]/g, "").trim(); return newstr.split(', ')});
-    
+            const samplesToFilter = bad
+              .split(")")
+              .filter((str) => str !== "")
+              .map((str) => {
+                const newstr = str.replace(/[()]/g, "").trim();
+                return newstr.split(", ");
+              });
+
             //filter provided list of bad samples from session file so we do batch analysis on sample file
-            const filtered = [...sessionFile].filter((rep) => !samplesToFilter.some((strArr) => strArr.includes(rep.Replicate)));
-            
-    
+            const filtered = [...sessionFile].filter(
+              (rep) =>
+                !samplesToFilter.some((strArr) =>
+                  strArr.includes(rep.Replicate)
+                )
+            );
+
             //retrieve objects of provided names because we need to do math on object properties
-            const providedReplicates = [...sessionFile].filter((rep) => samplesToFilter.some((strArr) => strArr.includes(rep.Replicate)))
-           
-    
-    
+            const providedReplicates = [...sessionFile].filter((rep) =>
+              samplesToFilter.some((strArr) => strArr.includes(rep.Replicate))
+            );
+
             // we now have the list of bad sample names as a 2D array where each group (or single) sample is together
             // and another list containing the bad sample objects that are not grouped together
             // we need te object to be groupd together like the array so we can do analysis
             //so go through the 2D array of names
             const res = samplesToFilter.map((strArr) => {
-    
               //for each array in the samples to filter, go through the array to get ALL the objects from the bad list
-             let arrOfNameAndObj =  strArr.map((nameReplicate) => {
-    
-              //return the object that matches the name of the replicate 
-                return providedReplicates.find((replicate) => replicate.Replicate === nameReplicate)
-              })
-              
+              let arrOfNameAndObj = strArr.map((nameReplicate) => {
+                //return the object that matches the name of the replicate
+                return providedReplicates.find(
+                  (replicate) => replicate.Replicate === nameReplicate
+                );
+              });
+
               // now return the same array, but add the corresponding object
-              return arrOfNameAndObj
-              })
-    
-              // error handle
-                setErrorWithBadSamples(res.length !== samplesToFilter.length)
+              return arrOfNameAndObj;
+            });
 
-                setPageReloadFile(filtered.map((rep) => { // for averages and reducers we need to make sure floats are parse-able
-                  if (rep['Ratio To Standard'].contains('/[E]/i')){
-                    const ratio = bigInt(rep['Ratio To Standard']);
-                  }
-                  const ratio = parseFloat(rep['Ratio To Standard']);
-                  const quant = parseFloat(rep?.Quantification.split(' ').at(0));
+            // error handle
+            setErrorWithBadSamples(res.length !== samplesToFilter.length);
 
-                  if (isNaN(ratio)){
-                    rep.ParsedRatioToStandard = 0; 
+            setPageReloadFile(
+              filtered
+                .map((rep) => {
+                  // for averages and reducers we need to make sure floats are parse-able
+
+                  const ratio = parseFloat(rep["Ratio To Standard"]);
+                  const quant = parseFloat(
+                    rep?.Quantification.split(" ").at(0)
+                  );
+
+                  if (isNaN(ratio)) {
+                    rep.ParsedRatioToStandard = 0;
                   } else {
                     rep.ParsedRatioToStandard = ratio;
                   }
 
-                  isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
+                  isNaN(quant)
+                    ? (rep.ParsedQuantification = 0)
+                    : (rep.ParsedQuantification = quant);
                   return rep;
-                }).sort((item, next) => { //sort by name to group samples together in run
-                  const first = item?.Replicate
+                })
+                .sort((item, next) => {
+                  //sort by name to group samples together in run
+                  const first = item?.Replicate;
                   const second = next?.Replicate;
-                  if (first < second){
+                  if (first < second) {
                     return -1;
                   }
                   if (first > second) {
                     return 1;
                   }
                   return 0;
-                }))
-                setOutlierSampleFromFile(res.map((arr) => {
-                      return arr.map((rep) => { // for averages and reducers we need to make sure floats are parse-able
-                        const ratio = parseFloat(rep['Ratio To Standard']);
-                        const quant = parseFloat(rep?.Quantification.split(' ').at(0));
-      
-                        if (isNaN(ratio)){
-                          rep.ParsedRatioToStandard = 0; 
-                        } else {
-                          rep.ParsedRatioToStandard = ratio;
-                        }
-      
-                        isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
-                        return rep;
-                      })
-                }))
-                clearInterval(possibleInterval)
+                })
+            );
+            setOutlierSampleFromFile(
+              res.map((arr) => {
+                return arr.map((rep) => {
+                  // for averages and reducers we need to make sure floats are parse-able
+                  const ratio = parseFloat(rep["Ratio To Standard"]);
+                  const quant = parseFloat(
+                    rep?.Quantification.split(" ").at(0)
+                  );
 
+                  if (isNaN(ratio)) {
+                    rep.ParsedRatioToStandard = 0;
+                  } else {
+                    rep.ParsedRatioToStandard = ratio;
+                  }
+
+                  isNaN(quant)
+                    ? (rep.ParsedQuantification = 0)
+                    : (rep.ParsedQuantification = quant);
+                  return rep;
+                });
+              })
+            );
+            clearInterval(possibleInterval);
           }
-            
         } else if (parseInt(allSame) === 0) {
-           
-        clearInterval(possibleInterval);
-        setPageReloadFile([...sessionFile]
-        
-        .map((rep) => { // for averages and reducers we need to make sure floats are parse-able
-          const ratio = parseFloat(rep['Ratio To Standard']);
-          const quant = parseFloat(rep?.Quantification.split(' ').at(0));
+          clearInterval(possibleInterval);
+          setPageReloadFile(
+            [...sessionFile].map((rep) => {
+              // for averages and reducers we need to make sure floats are parse-able
+              const ratio = parseFloat(rep["Ratio To Standard"]);
+              const quant = parseFloat(rep?.Quantification.split(" ").at(0));
 
-          if (isNaN(ratio)){
-            rep.ParsedRatioToStandard = 0; 
-          } else {
-            rep.ParsedRatioToStandard = ratio;
-          }
+              if (isNaN(ratio)) {
+                rep.ParsedRatioToStandard = 0;
+              } else {
+                rep.ParsedRatioToStandard = ratio;
+              }
 
-          isNaN(quant) ? rep.ParsedQuantification = 0 : rep.ParsedQuantification = quant;
+              isNaN(quant)
+                ? (rep.ParsedQuantification = 0)
+                : (rep.ParsedQuantification = quant);
 
-          return rep;
-        }));
+              return rep;
+            })
+          );
         }
-        
-        
       }
     }
-  
   }, [navigate, allSame]);
-
 
   useEffect(() => {
     if (seconds <= 0 || !isFileErrorMessage) return;
@@ -180,70 +196,72 @@ export default function ChartsPage() {
 
   useEffect(() => {
     //check url params are good
-setAllSameUrlGood(parseInt(allSame) === 1 || parseInt(allSame) === 0)
-setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10)
-  }, [repNum, allSame])
+    setAllSameUrlGood(parseInt(allSame) === 1 || parseInt(allSame) === 0);
+    setReplicateNumGood(parseInt(repNum) > 0 && parseInt(repNum) <= 10);
+  }, [repNum, allSame]);
 
   return (
     <Layout>
       <div
-        style={{ paddingTop: "5em", display: "flex", flexDirection: "column", flexShrink: '0'}}
+        style={{
+          paddingTop: "5em",
+          display: "flex",
+          flexDirection: "column",
+          flexShrink: "0",
+        }}
       >
         {isFileErrorMessage && (
-          <div
-          className="error-div-charts-page"
-            aria-label="no file found"
-            
-          >
-            <p
-             className="error-message-paragraph"
-             
-            >
+          <div className="error-div-charts-page" aria-label="no file found">
+            <p className="error-message-paragraph">
               Error. The file associated with this session is either formatted
-              incorrectly or not present. Please make sure a valid file has been selected. Rerouting you to the home page in {seconds} second
+              incorrectly or not present. Please make sure a valid file has been
+              selected. Rerouting you to the home page in {seconds} second
               {seconds > 1 ? "s" : ""}
             </p>
-          </div>)}
-          {errorWithBadSamples && (
-          <div
-          className="error-div-charts-page"
-            aria-label="no file found"
-            
-          >
+          </div>
+        )}
+        {errorWithBadSamples && (
+          <div className="error-div-charts-page" aria-label="no file found">
             <p
-             className="error-message-paragraph"
-             aria-label='error, no additional samples provided'
-             
+              className="error-message-paragraph"
+              aria-label="error, no additional samples provided"
             >
-              Error. There are samples without the provided number technical samples, however those outlier samples have either not been provided, or cannot be processed. 
-              Please select 'No' on the third question in the homepage form and provide the outlier samples in the acceptable format.
-              If the error continues, please close this browser window and restart. 
+              Error. There are samples without the provided number technical
+              samples, however those outlier samples have either not been
+              provided, or cannot be processed. Please select 'No' on the third
+              question in the homepage form and provide the outlier samples in
+              the acceptable format. If the error continues, please close this
+              browser window and restart.
             </p>
-          </div>)}
+          </div>
+        )}
 
-          { (!allSameUrlGood || !replicateNumGood) && (
-          <div
-          className="error-div-charts-page"
-            aria-label="no file found"
-          
-          >
-            <p
-            className="error-message-paragraph"   
-            >
-              Error. Either the number of replicates cannot be processed or it cannot be determined if all the samples in this run have the same 
-              number of technical replicates. Please be sure not to alter the url. Failure to do so will cause the data analysis to behvave
-              unpredictably. If you feel this is in error, <a href='/contact'>please contact us here</a>. To return to the home page, <a href='/'>click here.</a>
+        {(!allSameUrlGood || !replicateNumGood) && (
+          <div className="error-div-charts-page" aria-label="no file found">
+            <p className="error-message-paragraph">
+              Error. Either the number of replicates cannot be processed or it
+              cannot be determined if all the samples in this run have the same
+              number of technical replicates. Please be sure not to alter the
+              url. Failure to do so will cause the data analysis to behvave
+              unpredictably. If you feel this is in error,{" "}
+              <a href="/contact">please contact us here</a>. To return to the
+              home page, <a href="/">click here.</a>
             </p>
-          </div>)}
-         
-          { (!isFileErrorMessage && allSameUrlGood && replicateNumGood && !errorWithBadSamples) &&(
-          <div  
-          id='main-charts-page-div'
-          >
-          <MainTable fileData={pageReloadFile} repNum={parseInt(repNum)} outlierSampleFromFile={outlierSampleFromFile}/>
-            
-            </div>) }
-        
+          </div>
+        )}
+
+        {!isFileErrorMessage &&
+          allSameUrlGood &&
+          replicateNumGood &&
+          !errorWithBadSamples && (
+            <div id="main-charts-page-div">
+              <MainTable
+                fileData={pageReloadFile}
+                repNum={parseInt(repNum)}
+                outlierSampleFromFile={outlierSampleFromFile}
+              />
+            </div>
+          )}
       </div>
     </Layout>
   );

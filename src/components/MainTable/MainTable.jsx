@@ -8,6 +8,7 @@ import ExportButton from "../ExportButton/ExportButton";
 import { unparse } from "papaparse";
 import generatePDF from "react-to-pdf";
 import GroupTableSubheader from "../GroupTable/GroupTableSubheader";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [outlierArr, setOutlierArr] = useState([]);
@@ -16,6 +17,8 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [showData, setShowData] = useState(false);
   const [selectedCol, setSelectedCol] = useState([])
   const [pdfLoading, setPdfLoading] = useState(false)
+  const [showErrorX, setShowErrorX] = useState(true)
+  const [showErrorY, setShowErrorY] = useState(true)
   const targetRef = useRef(null);
 
   const toPDF = () => {
@@ -100,14 +103,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
         //standard deviation for Ratio by passing in array of values
         fileData[index].RSTDEV = std(tempSum);
-        //error bars line graph where Ratio is the X axis
-        fileData[index].errorX = std(tempSum);
-
 
         //stdev for Quantification
         fileData[index].QSTDEV = std(tempQuantSum);
-        fileData[index].errorY = std(tempQuantSum);
-
 
         //coefficient of variation
         fileData[index].QuantCove = std(tempQuantSum) / quantSetAvg;
@@ -151,7 +149,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           singletonListObj[0].x = singletonListObj[0].ParsedRatioToStandard;
           singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
-          // singletonListObj[0].GroupID = ++groupId;
           singletonListObj[0].QuantCove = "single sample";
           singletonListObj[0].RatioCove = "single sample";
           singletonListObj[0].RSTDEV = "single sample";
@@ -186,7 +183,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           listOfOutliers[listOfOutliers.length - 1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].y = quantGrpAvg;
-          // listOfOutliers[listOfOutliers.length - 1].GroupID = ++groupId
           tempOutlierList.push(listOfOutliers); // add this list to the list
         }
       }
@@ -241,6 +237,34 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           justifyContent: "flex-end",
         }}
       >
+          <OverlayTrigger 
+        placement="top"
+        overlay={<Tooltip id="button-tooltip-2">Display error bars for Quantification. Error Bars are calculated by the standard deviation.</Tooltip>}>
+        <button
+          className="button-button-hide"
+          onClick={() => 
+            setShowErrorY(!showErrorY)
+          
+        }
+        >
+          {showErrorY ? "Hide Quantification Error" : "Show Quantification Error"}
+        </button>
+
+        </OverlayTrigger>
+        <OverlayTrigger 
+        placement="top"
+        overlay={<Tooltip id="button-tooltip-2">Display error bars for Ratio To Standard. Error Bars are calculated by the standard deviation.</Tooltip>}>
+        <button
+          className="button-button-hide"
+          onClick={() => 
+            setShowErrorX(!showErrorX)
+          
+        }
+        >
+          {showErrorX ? "Hide Ratio Error" : "Show Ratio Error"}
+        </button>
+
+        </OverlayTrigger>
         <button
           className="button-button-hide"
           onClick={() => 
@@ -275,6 +299,8 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
               .filter(
                 (rep) => rep.RatioAvg !== undefined && rep?.Peptide === pepName
               )}
+              showErrorX={showErrorX}
+              showErrorY={showErrorY}
           />
         ))}
       </div>

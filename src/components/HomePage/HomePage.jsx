@@ -1,5 +1,5 @@
 import Layout from "../Layout/Layout";
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import heron from "./heronLogo.jpg";
 import "./homepage.css";
 import Papa from "papaparse";
@@ -24,11 +24,14 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [switchState, setSwitchSate] = useState(false);
   const [badListFormatAccepted, setBadListFormatAccepted] = useState(true);
   const [noFile, setNoFile] = useState(true);
-  const [noFileMessage, setNoFileMessage] = useState(false)
+  const [noFileMessage, setNoFileMessage] = useState(false);
+  const [replicateSizeChanged, setReplicateSizeChanged] = useState(false);
+  const [showReplicateMessage, setShowReplicateMessage] = useState(false);
+
   const navigate = useNavigate();
   const startRef = useRef();
 
-  const {hyperlink} = useParams()
+  const { hyperlink } = useParams();
   const showForm = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -55,7 +58,7 @@ export default function HomePage({ setFile, setBadSamples }) {
         },
         complete: function (results) {
           setFile(results.data);
-          setNoFile(false)
+          setNoFile(false);
         },
       });
     }
@@ -68,14 +71,14 @@ export default function HomePage({ setFile, setBadSamples }) {
   };
 
   const handleBadSampleList = (e) => {
-    setBadSamples(e.target.value)
+    setBadSamples(e.target.value);
 
     //make a copy to track for error handling on this page and char count
     setBadSampleList(e.target.value);
   };
   const handleTechnicalReplicate = (e) => {
-   
-
+    setReplicateSizeChanged(true);
+    setShowReplicateMessage(false);
     setTechnicalReplicate(e.target.value);
   };
 
@@ -83,9 +86,13 @@ export default function HomePage({ setFile, setBadSamples }) {
     e.preventDefault();
     e.stopPropagation();
 
-    
-      setNoFileMessage(noFile)
-    
+    if (!replicateSizeChanged) {
+      setShowReplicateMessage(true);
+      return;
+    }
+
+    setNoFileMessage(noFile);
+
     //if first two fields are good, check if the all samples have same replicate num
     if (isAcceptableFormat && isFileProcessed && !noFile) {
       //if all samples have replicate num, process data
@@ -108,17 +115,13 @@ export default function HomePage({ setFile, setBadSamples }) {
           //all same is 1 for false
           navigate(`/${technicalReplicate}/${1}/charts`);
         } else {
-          setBadListFormatAccepted(
-            BAD_LIST_PATTERN.test(badSampleList.trim())
-          );
+          setBadListFormatAccepted(BAD_LIST_PATTERN.test(badSampleList.trim()));
         }
       }
 
       //refreshes component to nil
     }
   };
-
-
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -134,14 +137,13 @@ export default function HomePage({ setFile, setBadSamples }) {
     }
   }, [showCSVForm]);
 
-useEffect(() => {
-if (!hyperlink) return;
+  useEffect(() => {
+    if (!hyperlink) return;
 
-if (hyperlink === 'new') {
-startRef.current.click()
-}
-
-}, [])
+    if (hyperlink === "new") {
+      startRef.current.click();
+    }
+  }, []);
   return (
     <Layout>
       <div
@@ -149,35 +151,62 @@ startRef.current.click()
           backgroundColor: "black",
           height: "100vh",
           display: "flex",
-          flexDirection: 'column',
+          flexDirection: "column",
           alignItems: "center",
           justifyItems: "center",
-          
         }}
       >
-
         <img
           id={"heron-main-logo"}
           aria-label="heron logo"
           alt="logo"
           src={heron}
         />
-          <h5 id="tagline" style={{color: 'white', paddingBottom: '0', marginTop: "0.7em", textAlign: "center"}}>Save time analyzing Skyline standard calibration curves</h5>
-          <h6 id="tagline" style={{color: 'white', paddingBottom: '0', marginTop: "0.7em", textAlign: "center"}}><em>Improve Rigor and Reproducibility of Biomedical Proteomics</em></h6>
+        <h5
+          id="tagline"
+          style={{
+            color: "white",
+            paddingBottom: "0",
+            marginTop: "0.7em",
+            textAlign: "center",
+          }}
+        >
+          Save time analyzing Skyline standard calibration curves
+        </h5>
+        <h6
+          id="tagline"
+          style={{
+            color: "white",
+            paddingBottom: "0",
+            marginTop: "0.7em",
+            textAlign: "center",
+          }}
+        >
+          <em>Improve Rigor and Reproducibility of Biomedical Proteomics</em>
+        </h6>
 
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.7em auto 0 auto'}}>
-        <button ref={startRef} onClick={showForm} className="button-button">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0.7em auto 0 auto",
+          }}
+        >
+          <button ref={startRef} onClick={showForm} className="button-button">
             Get Started
           </button>
-          <button onClick={() => navigate('/learning')} className="button-button">Learn More</button>
-
+          <button
+            onClick={() => navigate("/learning")}
+            className="button-button"
+          >
+            Learn More
+          </button>
         </div>
-      
-      
       </div>
-     
+
       {showCSVForm && (
-        <form id="csv-elem" aria-label="form to upload and submit csv" >
+        <form id="csv-elem" aria-label="form to upload and submit csv">
           <ul className="wrapper">
             <li className="form-row-title">
               <h2>Upload Skyline File</h2>
@@ -225,11 +254,10 @@ startRef.current.click()
                 </p>
               </li>
             )}
-            
 
             <li className="form-row">
               <label aria-label="select number of replicates" htmlFor="rep-num">
-               Number of Technical Replicates
+                Number of Technical Replicates
               </label>
               <select
                 id="rep-num"
@@ -248,6 +276,17 @@ startRef.current.click()
                 <option value={10}>10</option>
               </select>
             </li>
+            {showReplicateMessage && (
+              <li className="form-col">
+                <p
+                  aria-label="Replicate Size not selected"
+                  style={{ color: "red" }}
+                >
+                  Error. Number of technical replicates has not been selected.
+                  Please select a number of technical replicates.
+                </p>
+              </li>
+            )}
             <li className="form-row">
               <Form.Label
                 htmlFor="good-run"
@@ -255,7 +294,8 @@ startRef.current.click()
               >
                 {technicalReplicate > 1 ? "Are" : "Is"} there{" "}
                 <strong>{technicalReplicate}</strong> replicate
-                {technicalReplicate > 1 ? "s" : ""} for all samples in the document?
+                {technicalReplicate > 1 ? "s" : ""} for all samples in the
+                document?
               </Form.Label>
               <Form.Check
                 id="good-run"
@@ -265,15 +305,17 @@ startRef.current.click()
                 label={goodRun ? "Yes" : "No"}
               ></Form.Check>
             </li>
+
             {!goodRun && (
               <li className="form-col">
                 <label
                   aria-describedby="bad-sample-list-requirements"
                   htmlFor="bad-sample-list"
                 >
-                  Provide List of Samples without the Specified Number of Replicates
+                  Provide List of Samples without the Specified Number of
+                  Replicates
                 </label>
-                <br/>
+                <br />
                 <small id="bad-sample-list-requirements">
                   {BAD_RUNS_PLACEHOLDER}
                 </small>
@@ -287,8 +329,8 @@ startRef.current.click()
                   </small>
                 )}
                 <textarea
-                onKeyDown={(e) => handleBadSampleList(e)}
-                wrap='off'
+                  onKeyDown={(e) => handleBadSampleList(e)}
+                  wrap="off"
                   placeholder="ex: (sample1, sample2) (sample3)"
                   name="bad-sample-list"
                   className={
@@ -298,7 +340,6 @@ startRef.current.click()
                   }
                   maxLength={1000}
                   required
-                  
                   type="text"
                   value={badSampleList}
                   onChange={(e) => handleBadSampleList(e)}
@@ -313,7 +354,6 @@ startRef.current.click()
                 ) : (
                   <small>No characters remaining</small>
                 )}
-              
               </li>
             )}
             <li className="form-row-spacer">
