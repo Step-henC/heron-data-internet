@@ -12,7 +12,7 @@ import {
 import "./line.css";
 
 import regression from "regression";
-export default function LineCharts({ peptideName, dataForLineGraph, showData }) {
+export default function LineCharts({ peptideName, dataForLineGraph, showData, showErrorX, showErrorY }) {
   const arr = [];
   dataForLineGraph.forEach((rep) => {
     let tempArr = [rep.y, rep.x];
@@ -56,6 +56,7 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData }) 
         ]}
       />
       <VictoryScatter
+    
         events={[
       
           {
@@ -96,7 +97,9 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData }) 
           },
         }}
       />
-      <VictoryErrorBar 
+    { true && <VictoryErrorBar 
+       errorY={(datum) => showErrorY ? datum.QSTDEV : 0}
+       errorX={(datum) => showErrorX ? datum.RSTDEV : 0}
       data={dataForLineGraph}
       style={{
         data: {
@@ -123,7 +126,7 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData }) 
   // }
       />
 
-      
+}
       <VictoryLine
         standalone={false}
         size={5}

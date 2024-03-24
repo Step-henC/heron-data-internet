@@ -25,6 +25,9 @@ export default function HomePage({ setFile, setBadSamples }) {
   const [badListFormatAccepted, setBadListFormatAccepted] = useState(true);
   const [noFile, setNoFile] = useState(true);
   const [noFileMessage, setNoFileMessage] = useState(false)
+  const [replicateSizeChanged, setReplicateSizeChanged] = useState(false)
+  const [showReplicateMessage, setShowReplicateMessage] = useState(false)
+
   const navigate = useNavigate();
   const startRef = useRef();
 
@@ -75,7 +78,8 @@ export default function HomePage({ setFile, setBadSamples }) {
   };
   const handleTechnicalReplicate = (e) => {
    
-
+    setReplicateSizeChanged(true);
+    setShowReplicateMessage(false)
     setTechnicalReplicate(e.target.value);
   };
 
@@ -83,7 +87,11 @@ export default function HomePage({ setFile, setBadSamples }) {
     e.preventDefault();
     e.stopPropagation();
 
-    
+      if (!replicateSizeChanged){
+          setShowReplicateMessage(true)
+          return;
+      }
+
       setNoFileMessage(noFile)
     
     //if first two fields are good, check if the all samples have same replicate num
@@ -192,17 +200,7 @@ startRef.current.click()
                 id="file-input"
               />
             </li>
-            {!isAcceptableFormat && (
-              <li className="form-col">
-                <p
-                  aria-label="File format error. Not a valid CSV or XLSX file"
-                  style={{ color: "red" }}
-                >
-                  Error: The selected file is not an acceptable file format.
-                  Please select a CSV or xlsx file.
-                </p>
-              </li>
-            )}
+           
             {!isFileProcessed && (
               <li className="form-row">
                 <p
@@ -248,6 +246,16 @@ startRef.current.click()
                 <option value={10}>10</option>
               </select>
             </li>
+            {showReplicateMessage && (
+              <li className="form-col">
+                <p
+                  aria-label="Replicate Size not selected"
+                  style={{ color: "red" }}
+                >
+                 Error. Number of technical replicates has not been selected. Please select a number of technical replicates.
+                </p>
+              </li>
+            )}
             <li className="form-row">
               <Form.Label
                 htmlFor="good-run"
@@ -265,6 +273,7 @@ startRef.current.click()
                 label={goodRun ? "Yes" : "No"}
               ></Form.Check>
             </li>
+          
             {!goodRun && (
               <li className="form-col">
                 <label
