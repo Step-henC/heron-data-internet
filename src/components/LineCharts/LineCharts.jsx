@@ -7,6 +7,7 @@ import {
   VictoryScatter,
   VictoryContainer,
   VictoryLabel,
+  VictoryErrorBar,
 } from "victory";
 import "./line.css";
 
@@ -95,6 +96,34 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData }) 
           },
         }}
       />
+      <VictoryErrorBar 
+      data={dataForLineGraph}
+      style={{
+        data: {
+          strokeWidth: 2
+        },}}
+  //     events={[{
+  //       eventHandlers: {
+  //         onClick: () => {
+  //           return [
+  //             {
+  //               target: 'data',
+  //               mutation: (props) => {
+  //                 return props.style.strokeWidth === 0 ? null :
+  //                 {
+  //                   style: {strokeWidth: 1}
+  //                 }
+  //               }
+  //             }
+  //         ]
+  //         }
+  //       }
+  //     }
+  //   ]
+  // }
+      />
+
+      
       <VictoryLine
         standalone={false}
         size={5}

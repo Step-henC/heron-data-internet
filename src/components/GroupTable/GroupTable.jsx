@@ -19,6 +19,15 @@ export default function GroupTable({ groupData, selectedCol }) {
 
   const columns = [
     {
+      name: "Peptide",
+      selector: (row) => row?.Peptide,
+      wrap: true,
+      reorder: true,
+      omit: selectedCol.some(
+        (item) => item.label === "Peptide"
+      ),
+    },
+    {
       name: "Replicate Name",
       selector: (row) => row?.Replicate,
       wrap: true,

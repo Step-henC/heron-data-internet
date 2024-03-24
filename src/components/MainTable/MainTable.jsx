@@ -16,12 +16,10 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
   const [showData, setShowData] = useState(false);
   const [selectedCol, setSelectedCol] = useState([])
   const [pdfLoading, setPdfLoading] = useState(false)
-  const [csvLoading, setCsvLoading] = useState(false)
   const targetRef = useRef(null);
 
   const toPDF = () => {
     setPdfLoading(true)
-    // const whatToGenerate = document.getElementById("")
     generatePDF(targetRef, {}).then(() => setPdfLoading(false));
   };
 
@@ -60,7 +58,7 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
     var testLink = document.createElement("a");
     testLink.href = csvURL;
     testLink.click();
-  
+
   };
 
   useEffect(() => {
@@ -102,8 +100,14 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
         //standard deviation for Ratio by passing in array of values
         fileData[index].RSTDEV = std(tempSum);
+        //error bars line graph where Ratio is the X axis
+        fileData[index].errorX = std(tempSum);
+
+
         //stdev for Quantification
         fileData[index].QSTDEV = std(tempQuantSum);
+        fileData[index].errorY = std(tempQuantSum);
+
 
         //coefficient of variation
         fileData[index].QuantCove = std(tempQuantSum) / quantSetAvg;
@@ -240,7 +244,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
         <button
           className="button-button-hide"
           onClick={() => 
-            // e.preventDefault();
             setShowData(!showData)
           
         }

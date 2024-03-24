@@ -2,6 +2,7 @@ import Select from "react-select";
 import React from "react";
 export default function GroupTableSubheader({ selectFunction }) {
   const options = [
+    { value: "Peptide", label: "Peptide" },
     { value: "Replicate Name", label: "Replicate Name" },
     {
       value: "Quantification Average (X axis)",
