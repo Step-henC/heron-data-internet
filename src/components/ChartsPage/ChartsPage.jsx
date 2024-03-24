@@ -5,6 +5,7 @@ import Layout from "../Layout/Layout";
 import { EXPECTED_FIELD_NAMES } from "../../utils/acceptablefileformat";
 import './chartspage.css'
 import { useParams } from "react-router-dom";
+import bigInt from "big-integer";
 
 export default function ChartsPage() {
   const [pageReloadFile, setPageReloadFile] = useState([]);
@@ -94,6 +95,9 @@ export default function ChartsPage() {
                 setErrorWithBadSamples(res.length !== samplesToFilter.length)
 
                 setPageReloadFile(filtered.map((rep) => { // for averages and reducers we need to make sure floats are parse-able
+                  if (rep['Ratio To Standard'].contains('/[E]/i')){
+                    const ratio = bigInt(rep['Ratio To Standard']);
+                  }
                   const ratio = parseFloat(rep['Ratio To Standard']);
                   const quant = parseFloat(rep?.Quantification.split(' ').at(0));
 
