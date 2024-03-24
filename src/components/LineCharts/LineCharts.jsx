@@ -12,7 +12,13 @@ import {
 import "./line.css";
 
 import regression from "regression";
-export default function LineCharts({ peptideName, dataForLineGraph, showData, showErrorX, showErrorY }) {
+export default function LineCharts({
+  peptideName,
+  dataForLineGraph,
+  showData,
+  showErrorX,
+  showErrorY,
+}) {
   const arr = [];
   dataForLineGraph.forEach((rep) => {
     let tempArr = [rep.y, rep.x];
@@ -56,9 +62,7 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData, sh
         ]}
       />
       <VictoryScatter
-    
         events={[
-      
           {
             target: "data",
             eventHandlers: {
@@ -81,10 +85,14 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData, sh
         symbol={({ datum }) =>
           datum?.Replicate.match(/(std)/gi) ? "circle" : "triangleUp"
         }
-        labels={({ datum }) => showData ? [
-          `y: ${Math.round((datum.y + Number.EPSILON) * 100) / 100}`,
-          `x: ${Math.round((datum.x + Number.EPSILON) * 100) / 100}`,
-        ] : ""}
+        labels={({ datum }) =>
+          showData
+            ? [
+                `y: ${Math.round((datum.y + Number.EPSILON) * 100) / 100}`,
+                `x: ${Math.round((datum.x + Number.EPSILON) * 100) / 100}`,
+              ]
+            : ""
+        }
         data={dataForLineGraph}
         size={5}
         style={{
@@ -97,36 +105,16 @@ export default function LineCharts({ peptideName, dataForLineGraph, showData, sh
           },
         }}
       />
-    { true && <VictoryErrorBar 
-       errorY={(datum) => showErrorY ? datum.QSTDEV : 0}
-       errorX={(datum) => showErrorX ? datum.RSTDEV : 0}
-      data={dataForLineGraph}
-      style={{
-        data: {
-          strokeWidth: 2
-        },}}
-  //     events={[{
-  //       eventHandlers: {
-  //         onClick: () => {
-  //           return [
-  //             {
-  //               target: 'data',
-  //               mutation: (props) => {
-  //                 return props.style.strokeWidth === 0 ? null :
-  //                 {
-  //                   style: {strokeWidth: 1}
-  //                 }
-  //               }
-  //             }
-  //         ]
-  //         }
-  //       }
-  //     }
-  //   ]
-  // }
+      <VictoryErrorBar
+        errorY={(datum) => (showErrorY ? datum.QSTDEV : 0)}
+        errorX={(datum) => (showErrorX ? datum.RSTDEV : 0)}
+        data={dataForLineGraph}
+        style={{
+          data: {
+            strokeWidth: 2,
+          },
+        }}
       />
-
-}
       <VictoryLine
         standalone={false}
         size={5}

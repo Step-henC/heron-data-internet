@@ -103,14 +103,9 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
 
         //standard deviation for Ratio by passing in array of values
         fileData[index].RSTDEV = std(tempSum);
-        //error bars line graph where Ratio is the X axis
-        //fileData[index].errorX = std(tempSum);
-
 
         //stdev for Quantification
         fileData[index].QSTDEV = std(tempQuantSum);
-        //fileData[index].errorY = std(tempQuantSum);
-
 
         //coefficient of variation
         fileData[index].QuantCove = std(tempQuantSum) / quantSetAvg;
@@ -154,15 +149,10 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           singletonListObj[0].x = singletonListObj[0].ParsedRatioToStandard;
           singletonListObj[0].y = singletonListObj[0].ParsedQuantification;
-          // singletonListObj[0].GroupID = ++groupId;
           singletonListObj[0].QuantCove = "single sample";
           singletonListObj[0].RatioCove = "single sample";
           singletonListObj[0].RSTDEV = "single sample";
           singletonListObj[0].QSTDEV = "single sample";
-          singletonListObj[0].errorY = 0;
-          singletonListObj[0].errorX = 0;
-
-
 
           tempOutlierList.push(singletonListObj);
         } else {
@@ -183,8 +173,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           listOfOutliers[listOfOutliers.length - 1].QuantAvg = quantGrpAvg;
           listOfOutliers[listOfOutliers.length - 1].RSTDEV = std(ratioSum);
           listOfOutliers[listOfOutliers.length - 1].QSTDEV = std(quantSum);
-          listOfOutliers[listOfOutliers.length - 1].errorX = std(ratioSum);
-          listOfOutliers[listOfOutliers.length - 1].errory = std(quantSum);
 
           listOfOutliers[listOfOutliers.length - 1].RatioCove =
             std(ratioSum) / outlierGrpAvg;
@@ -195,7 +183,6 @@ export default function MainTable({ fileData, repNum, outlierSampleFromFile }) {
           //for line charts
           listOfOutliers[listOfOutliers.length - 1].x = outlierGrpAvg; //at the last item in arr, create an outlier prop equal to avg
           listOfOutliers[listOfOutliers.length - 1].y = quantGrpAvg;
-          // listOfOutliers[listOfOutliers.length - 1].GroupID = ++groupId
           tempOutlierList.push(listOfOutliers); // add this list to the list
         }
       }
