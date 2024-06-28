@@ -194,7 +194,10 @@ export default function HomePage({ setFile, setBadSamples }) {
           }}
         >
           <button ref={startRef} onClick={showForm} className="button-button">
-            Get Started
+            Average Replicates
+          </button>
+          <button ref={startRef} onClick={() => navigate("/auc")} className="button-button">
+            Area Under Curve
           </button>
           <button
             onClick={() => navigate("/learning")}

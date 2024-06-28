@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/auc",
+      "destination": "https://heron-auc.streamlit.app"
+    }
+  ]
+}
