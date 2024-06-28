@@ -8,6 +8,7 @@ import Contact from './components/Contact/Contact';
 import ContactSuccess from './components/Contact/ContactSuccess';
 import ContactError from './components/Contact/ContactError';
 import Example from './components/SampleDemo/Example';
+import Redirecting from './components/Redirecting';
 
 function App() {
 
@@ -34,7 +35,7 @@ function App() {
           <Route exact path='/contact/success' element={<ContactSuccess />} />
           <Route exact path='/contact/error' element={<ContactError />} />
           <Route exact path='/learning' element={<Example />} />
-          
+          <Route exact path='/auc' element={<Redirecting/>} />
 
           <Route exact path='/*' element={<NotFound/>} />
         </Routes>
