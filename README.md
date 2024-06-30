@@ -3,7 +3,7 @@
 Website: https://herondata.app
 
 New Feature! Area Under Curve: https://heron-auc.streamlit.app
-  github: https://github.com/Step-henC/heron-streamlit.com
+  github: [https://github.com/Step-henC/heron-streamlit.com](https://github.com/Step-henC/heron-streamlit)
 
 This is a refactor of this https://github.com/Step-henC/Heron_Data_Installer
 
