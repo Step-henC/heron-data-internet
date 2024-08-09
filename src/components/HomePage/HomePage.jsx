@@ -36,6 +36,12 @@ export default function HomePage({ setFile, setBadSamples }) {
     e.preventDefault();
     e.stopPropagation();
     setShowCSVForm(!showCSVForm);
+    if (hyperlink && hyperlink === 'new') {
+      navigate('/'
+      )
+    } else {
+      navigate('/new')
+    }
   };
 
   const handleFile = (e) => {
@@ -162,6 +168,17 @@ export default function HomePage({ setFile, setBadSamples }) {
           alt="logo"
           src={heron}
         />
+        <h4
+          id="tagline"
+          style={{
+            color: "white",
+            paddingBottom: "0",
+            marginTop: "0.7em",
+            textAlign: "center",
+          }}
+        >
+          Save time analyzing proteomics data processed in Skyline
+        </h4>
         <h5
           id="tagline"
           style={{
@@ -171,7 +188,7 @@ export default function HomePage({ setFile, setBadSamples }) {
             textAlign: "center",
           }}
         >
-          Save time analyzing Skyline standard calibration curves
+          Start Here
         </h5>
         <h6
           id="tagline"
@@ -182,7 +199,6 @@ export default function HomePage({ setFile, setBadSamples }) {
             textAlign: "center",
           }}
         >
-          <em>Improve Rigor and Reproducibility of Biomedical Proteomics</em>
         </h6>
 
         <div
@@ -194,10 +210,10 @@ export default function HomePage({ setFile, setBadSamples }) {
           }}
         >
           <button ref={startRef} onClick={showForm} className="button-button">
-            Average Replicates
+            Heron Quant
           </button>
           <button onClick={() => navigate("/auc")} className="button-button">
-            Area Under Curve
+            Heron Glyco
           </button>
           <button
             onClick={() => navigate("/learning")}

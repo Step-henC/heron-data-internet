@@ -14,12 +14,12 @@ export default function ChartsPage() {
   const [replicateNumGood, setReplicateNumGood] = useState(true);
   const [errorWithBadSamples, setErrorWithBadSamples] = useState(false);
   const [outlierSampleFromFile, setOutlierSampleFromFile] = useState([]);
-
+  
   let navigate = useNavigate();
   const { allSame } = useParams();
   const { repNum } = useParams();
 
-  useEffect(() => {
+useEffect(() => {
     let possibleInterval;
     const sessionFile = JSON.parse(sessionStorage.getItem("file"));
 

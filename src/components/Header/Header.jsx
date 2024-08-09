@@ -1,15 +1,16 @@
-import Offcanvas from "react-bootstrap/Offcanvas";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import heronlogo from "../../heronLogo.svg";
-import ListGroup from "react-bootstrap/ListGroup";
-import React, { useState } from "react";
-import {useNavigate} from 'react-router-dom'
-import "./style.css";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import { Nav } from 'react-bootstrap';
+import heronlogo from '../../heronLogo.svg';
+import ListGroup from 'react-bootstrap/ListGroup';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './headerstyle.css';
 
 export default function Header() {
   const [show, setShow] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleShowOffCanvas = (e) => {
     e.preventDefault();
@@ -20,9 +21,8 @@ export default function Header() {
     <Navbar
       style={{
         background:
-          " linear-gradient(90deg, #e19b62, #b04646, #b5c0d8, #6c82b7, #1f3d85,  #1f3d85, #1f3d85, #b04646)",
+          ' linear-gradient(90deg, #e19b62, #b04646, #b5c0d8, #6c82b7, #1f3d85,  #1f3d85, #1f3d85, #b04646)',
       }}
-      //data-bs-theme="light"
       fixed="top"
       expand="lg"
       className="bg-body-tertiary mb-3"
@@ -35,12 +35,17 @@ export default function Header() {
             height="50"
             src={heronlogo}
             className="d-inline-block align top"
-          />{" "}
-          Heron Data
+          />{' '}
+          Heron Data Suite
         </Navbar.Brand>
-        <div id="main" tabIndex={1}>
+        <Nav className="d-flex me-1">
+          <caption className="catchphrase">
+            Improve Rigor and Reproducibility of Biomedical Proteomics
+          </caption>
+        </Nav>
+        <div id="main-header" tabIndex={1}>
           <span
-            style={{ fontSize: "30px", float: "right", cursor: "pointer" }}
+            style={{ fontSize: '30px', float: 'right', cursor: 'pointer' }}
             onClick={handleShowOffCanvas}
           >
             &#9776;
@@ -48,10 +53,10 @@ export default function Header() {
         </div>
 
         <Offcanvas
-          key={"anyKey"}
+          key={'anyKey'}
           backdrop
           scroll
-          placement={"end"}
+          placement={'end'}
           show={show}
           onHide={() => setShow(false)}
         >
@@ -60,18 +65,38 @@ export default function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <ListGroup>
-              <ListGroup.Item action variant="dark" 
-              onClick={() => navigate('/learning')}
+              <ListGroup.Item
+                action
+                variant="dark"
+                onClick={() => navigate('/')}
+              >
+                Home
+              </ListGroup.Item>
+              <ListGroup.Item
+                action
+                variant="dark"
+                onClick={() => navigate('/new')}
+              >
+                Heron Quant
+              </ListGroup.Item>
+              <ListGroup.Item
+                action
+                variant="dark"
+                onClick={() => navigate('/auc')}
+              >
+                Heron Glyco
+              </ListGroup.Item>
+              <ListGroup.Item
+                action
+                variant="dark"
+                onClick={() => navigate('/learning')}
               >
                 Example Tutorial
               </ListGroup.Item>
-              <ListGroup.Item action variant="dark"
-              onClick={() => navigate('/new')} 
-              >
-                Upload New File
-              </ListGroup.Item>
-              <ListGroup.Item action variant="dark" 
-               onClick={() => navigate('/contact')} 
+              <ListGroup.Item
+                action
+                variant="dark"
+                onClick={() => navigate('/contact')}
               >
                 Contact Us
               </ListGroup.Item>

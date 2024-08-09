@@ -36,7 +36,6 @@ function App() {
           <Route exact path='/contact/error' element={<ContactError />} />
           <Route exact path='/learning' element={<Example />} />
           <Route exact path='/auc' element={<Redirecting/>} />
-
           <Route exact path='/*' element={<NotFound/>} />
         </Routes>
       </Router>

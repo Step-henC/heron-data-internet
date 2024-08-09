@@ -2,3 +2,11 @@
 
     background-color: linear-gradient(90deg, #e19b62, #b04646, rgb(175, 183, 200), #6c82b7, #1f3d85,  #b04646);
 }
+
+.catchphrase {
+  color: white;
+}
+
+#main-header{
+    margin-left: 10%;
+}
