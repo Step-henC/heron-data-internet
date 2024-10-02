@@ -1,8 +1,14 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "destination": "https://herondata.dev"
+      "source": "/auc",
+      "destination": "https://heron-auc.streamlit.app/"
     }
+  ],
+  "redirects": [
+{ "source": "/",
+  "destination": "https://herondata.dev",
+  "permanent": true
+}
   ]
 }
