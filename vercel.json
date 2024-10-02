@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/auc",
-      "destination": "https://heron-auc.streamlit.app"
+      "source": "*",
+      "destination": "https://herondata.dev"
     }
   ]
 }
